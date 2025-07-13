@@ -1,0 +1,121 @@
+const Appointment = require("../models/Appointment");
+const Doctor = require("../models/Doctor");
+const User = require("../models/User");
+// Create Appointment
+// exports.bookAppointment = async (req, res) => {
+//   try {
+//     const appointment = new Appointment(req.body);
+//     await appointment.save();
+//     res.status(201).json(appointment);
+//   } catch (err) {
+//     res.status(400).json({ error: err.message });
+//   }
+// };
+
+// bookAppointment
+exports.bookAppointment = async (req, res) => {
+  try {
+    const { doctorId, patientId, appointmentDate, appointmentTime } = req.body;
+
+    if (!doctorId || !patientId || !appointmentDate || !appointmentTime) {
+      return res.status(400).json({ error: "All fields are required" });
+    }
+    const existing = await Appointment.findOne({
+      doctorId,
+      appointmentDate,
+      appointmentTime,
+    });
+
+    if (existing) {
+      return res
+        .status(400)
+        .json({ error: "This slot is already booked. Please choose another." });
+    }
+    const appointment = new Appointment({
+      doctorId,
+      patientId,
+      appointmentDate,
+      appointmentTime,
+      paymentStatus: "Pending",
+    });
+
+    await appointment.save();
+    res.status(201).json(appointment);
+  } catch (err) {
+    console.error("❌ Booking Error:", err.message);
+    res.status(500).json({ error: err.message });
+  }
+};
+
+// Get All Appointments
+exports.getAppointments = async (req, res) => {
+  try {
+    const appointments = await Appointment.find().sort({ appointmentDate: 1 });
+    res.status(200).json(appointments);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
+// Delete Appointment
+exports.cancelAppointment = async (req, res) => {
+  try {
+    await Appointment.findByIdAndDelete(req.params.id);
+    res.status(200).json({ message: "Appointment cancelled successfully" });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+exports.getAppointmentsByPatientId = async (req, res) => {
+  try {
+    const appointments = await Appointment.find({
+      patientId: req.params.patientId,
+    })
+      .populate("doctorId", "name specialization photo email")
+      .populate("patientId", "name");
+
+    res.status(200).json(appointments);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+exports.getDoctorBookedSlots = async (req, res) => {
+  const { doctorId, date } = req.query;
+
+  try {
+    const appointments = await Appointment.find({
+      doctorId,
+      appointmentDate: date,
+    });
+
+    const bookedSlots = appointments.map((a) => a.appointmentTime);
+    res.json(bookedSlots);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+// controllers/appointmentController.js
+
+// GET /api/appointments/doctor/:id
+exports.getAppointmentsForDoctor = async (req, res) => {
+  try {
+    const doctorId = req.params.doctorId;
+
+    console.log("Doctor ID from route:", doctorId); // ✅ Add this
+
+    if (!doctorId) {
+      return res.status(400).json({ error: "Doctor ID missing" });
+    }
+
+    const appointments = await Appointment.find({ doctorId })
+      .populate("patientId", "name email") // ✅ shows patient info
+      .exec();
+
+    console.log("Fetched Appointments:", appointments); // ✅ Add this too
+
+    res.status(200).json(appointments);
+  } catch (err) {
+    console.error("Error fetching appointments for doctor:", err.message);
+    res.status(500).json({ error: "Failed to fetch appointments" });
+  }
+};
