@@ -1,0 +1,120 @@
+.appointments-container {
+  min-height: 100vh;
+  background: linear-gradient(to right, #f7faff, #e1efff);
+  display: flex;
+  justify-content: center;
+  padding: 40px 20px;
+  font-family: "Segoe UI", sans-serif;
+}
+
+.appointments-inner {
+  width: 100%;
+  max-width: 900px;
+  background: white;
+  padding: 30px;
+  border-radius: 20px;
+  box-shadow: 0 12px 25px rgba(0, 0, 0, 0.08);
+  animation: fadeIn 0.4s ease-in-out;
+}
+
+.appointments-inner h2 {
+  text-align: center;
+  font-size: 26px;
+  margin-bottom: 30px;
+  color: #1e3a8a;
+}
+
+.empty-msg {
+  text-align: center;
+  color: #555;
+  font-size: 16px;
+}
+
+.appointments-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.appointment-card {
+  background-color: #f1f9ff;
+  border: 1px solid #d3e7ff;
+  padding: 20px;
+  border-radius: 15px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 20px;
+  align-items: center;
+}
+
+.doctor-info {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.doctor-info img {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.doctor-info h4 {
+  margin: 0;
+  font-size: 16px;
+  color: #1e40af;
+}
+
+.doctor-info p {
+  margin: 0;
+  font-size: 13px;
+  color: #555;
+}
+
+.appt-details p {
+  margin: 2px 0;
+  font-size: 14px;
+}
+
+.status-actions {
+  text-align: right;
+}
+
+.paid {
+  color: green;
+  font-weight: 600;
+}
+
+.pending {
+  color: red;
+  font-weight: 600;
+}
+
+.status-actions button {
+  background-color: #ef4444;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 6px 12px;
+  font-size: 13px;
+  cursor: pointer;
+  margin-top: 8px;
+  transition: 0.3s ease;
+}
+
+.status-actions button:hover {
+  background-color: #dc2626;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(15px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

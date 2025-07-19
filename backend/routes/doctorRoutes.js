@@ -6,6 +6,13 @@ const {
   deleteDoctor,
   getDoctorById,
 } = require("../controllers/doctorController");
+const {
+  getDoctorProfile,
+  updateDoctorProfile,
+  updateDoctorPassword,
+  updateDoctorProfilePic,
+} = require("../controllers/doctorController.js");
+const { upload } = require("../middlewares/uploadMiddleware.js");
 const { verifyToken, isAdmin } = require("../middlewares/authMiddleware");
 const { registerDoctor } = require("../controllers/doctorController");
 const authMiddleware = require("../middlewares/authDoctor");
@@ -56,5 +63,14 @@ router.post("/add", verifyToken, isAdmin, async (req, res) => {
 
 // POST /api/doctors/add
 router.post("/add", registerDoctor);
+
+router.get("/profile/:id", getDoctorProfile);
+router.put("/profile/:id", updateDoctorProfile);
+router.put("/password/:id", updateDoctorPassword);
+router.put(
+  "/profile-picture/:id",
+  upload.single("profilePicture"),
+  updateDoctorProfilePic
+);
 
 module.exports = router;

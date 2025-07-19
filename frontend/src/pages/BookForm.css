@@ -1,0 +1,90 @@
+.booking-container {
+  min-height: 100vh;
+  background: linear-gradient(to right, #f8fcff, #e6f0ff);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 40px 20px;
+  font-family: "Segoe UI", sans-serif;
+}
+
+.booking-card {
+  width: 100%;
+  max-width: 450px;
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(14px);
+  border-radius: 20px;
+  padding: 35px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+  animation: fadeIn 0.6s ease-in-out;
+}
+
+.booking-card h2 {
+  font-size: 22px;
+  text-align: center;
+  margin-bottom: 24px;
+  color: #1e3a8a;
+}
+
+form label {
+  display: block;
+  margin: 10px 0 5px;
+  font-weight: 600;
+  color: #333;
+}
+
+form input,
+form select {
+  width: 100%;
+  padding: 10px 14px;
+  font-size: 15px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  margin-bottom: 15px;
+}
+
+form select option:disabled {
+  color: #aaa;
+  font-style: italic;
+}
+
+form button {
+  width: 100%;
+  background-color: #16a34a;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  padding: 12px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+form button:hover {
+  background-color: #15803d;
+}
+
+.success-msg {
+  text-align: center;
+  color: green;
+  margin-bottom: 15px;
+  font-weight: 500;
+}
+
+.loader {
+  font-size: 16px;
+  color: #444;
+  padding: 20px;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(15px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

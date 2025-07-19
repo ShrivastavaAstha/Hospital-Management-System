@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const Doctor = require("../models/Doctor");
+const User = require("../models/User"); // import your user model at the top
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 
@@ -108,4 +109,63 @@ exports.doctorLogin = async (req, res) => {
     console.error("Login error:", err);
     res.status(500).json({ error: "Server error during login" });
   }
+};
+
+//Doctor Profile update
+
+exports.getDoctorProfile = async (req, res) => {
+  try {
+    const user = await User.findById(req.params.id);
+
+    if (!user || user.role !== "doctor") {
+      return res.status(404).json({ error: "Doctor not found" });
+    }
+
+    res.json(user);
+  } catch (err) {
+    console.error("Error fetching doctor profile:", err);
+    res.status(500).json({ error: "Failed to fetch profile" });
+  }
+};
+
+exports.updateDoctorProfile = async (req, res) => {
+  try {
+    const { name, email, phone, specialization, bio, availability } = req.body;
+
+    const updatedDoctor = await User.findByIdAndUpdate(
+      req.params.id,
+      { name, email, phone, specialization, bio, availability },
+      { new: true }
+    );
+
+    if (!updatedDoctor || updatedDoctor.role !== "doctor") {
+      return res.status(404).json({ error: "Doctor not found" });
+    }
+
+    res.json(updatedDoctor);
+  } catch (err) {
+    console.error("Profile update error:", err);
+    res.status(500).json({ error: "Failed to update doctor profile" });
+  }
+};
+
+exports.updateDoctorPassword = async (req, res) => {
+  const { currentPassword, newPassword } = req.body;
+  const doctor = await User.findById(req.params.id);
+
+  const isMatch = await bcrypt.compare(currentPassword, doctor.password);
+  if (!isMatch) return res.status(400).json({ message: "Incorrect password" });
+
+  doctor.password = await bcrypt.hash(newPassword, 10);
+  await doctor.save();
+  res.json({ message: "Password updated successfully" });
+};
+
+exports.updateDoctorProfilePic = async (req, res) => {
+  const doctor = await User.findByIdAndUpdate(
+    req.params.id,
+    { profilePicture: req.file.filename },
+    { new: true }
+  );
+  res.json(doctor);
 };

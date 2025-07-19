@@ -8,7 +8,12 @@ app.use(cors());
 app.use(express.json());
 
 // Routes
+
 const doctorRoutes = require("./routes/doctorRoutes");
+app.use("/api/doctors", doctorRoutes);
+
+app.use("/uploads", express.static("uploads")); // to serve image
+
 app.use("/api/doctors", doctorRoutes);
 
 const appointmentRoutes = require("./routes/appointmentRoutes");

@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import "./Auth.css";
+import confetti from "canvas-confetti";
 
 const Auth = () => {
   const [isLogin, setIsLogin] = useState(true);
@@ -28,6 +30,16 @@ const Auth = () => {
 
         localStorage.setItem("token", res.data.token);
         localStorage.setItem("user", JSON.stringify(res.data.user));
+        if (res.data.user.role === "doctor") {
+          localStorage.setItem("doctorId", res.data.user._id);
+        }
+
+        // 🎉 Show confetti
+        confetti({
+          particleCount: 150,
+          spread: 70,
+          origin: { y: 0.6 },
+        });
 
         const role = res.data.user.role;
         if (role === "admin") navigate("/dashboard");
@@ -35,6 +47,13 @@ const Auth = () => {
         else navigate("/patient-dashboard");
       } else {
         await axios.post("http://localhost:5000/api/auth/register", form);
+
+        // 🎉 Confetti on register too
+        confetti({
+          particleCount: 120,
+          spread: 90,
+          origin: { y: 0.4 },
+        });
         setIsLogin(true);
       }
     } catch (err) {
@@ -43,15 +62,11 @@ const Auth = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-tr from-purple-400 via-pink-300 to-yellow-200 px-4">
-      <div className="w-full max-w-md bg-white/60 backdrop-blur-md p-8 rounded-2xl shadow-2xl">
-        <h2 className="text-3xl font-bold text-center text-gray-800 mb-6">
-          {isLogin ? "Login to Your Account" : "Create an Account"}
-        </h2>
+    <div className="auth-container">
+      <div className="auth-box">
+        <h2>{isLogin ? "Login to Your Account" : "Create an Account"}</h2>
 
-        {error && (
-          <div className="text-red-600 text-sm text-center mb-4">{error}</div>
-        )}
+        {error && <p className="error">{error}</p>}
 
         <form onSubmit={handleSubmit}>
           {!isLogin && (
@@ -62,7 +77,6 @@ const Auth = () => {
               value={form.name}
               onChange={handleChange}
               required
-              className="w-full mb-4 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-400"
             />
           )}
 
@@ -73,7 +87,6 @@ const Auth = () => {
             value={form.email}
             onChange={handleChange}
             required
-            className="w-full mb-4 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
           />
 
           <input
@@ -83,7 +96,6 @@ const Auth = () => {
             value={form.password}
             onChange={handleChange}
             required
-            className="w-full mb-4 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
           />
 
           {!isLogin && (
@@ -91,7 +103,7 @@ const Auth = () => {
               name="role"
               value={form.role}
               onChange={handleChange}
-              className="w-full mb-4 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-400"
+              required
             >
               <option value="patient">Patient</option>
               <option value="doctor">Doctor</option>
@@ -99,44 +111,32 @@ const Auth = () => {
             </select>
           )}
 
-          <button
-            type="submit"
-            className={`w-full py-2 rounded-lg text-white font-semibold transition duration-300 ${
-              isLogin
-                ? "bg-indigo-600 hover:bg-indigo-700"
-                : "bg-green-600 hover:bg-green-700"
-            }`}
-          >
-            {isLogin ? "Login" : "Register"}
-          </button>
+          <button type="submit">{isLogin ? "Login" : "Register"}</button>
         </form>
 
-        <p className="text-center mt-6 text-sm text-gray-700">
+        <p className="toggle">
           {isLogin ? (
             <>
               Don’t have an account?{" "}
-              <button
-                type="button"
-                onClick={() => setIsLogin(false)}
-                className="text-purple-600 font-semibold hover:underline"
-              >
-                Register
-              </button>
+              <span onClick={() => setIsLogin(false)}>Register</span>
             </>
           ) : (
             <>
-              Already registered?{" "}
-              <button
-                type="button"
-                onClick={() => setIsLogin(true)}
-                className="text-blue-600 font-semibold hover:underline"
-              >
-                Login
-              </button>
+              Already have an account?{" "}
+              <span onClick={() => setIsLogin(true)}>Login</span>
             </>
           )}
         </p>
       </div>
+
+      {/* Animated SVG Waves */}
+      <svg className="wave" viewBox="0 0 1440 320">
+        <path
+          fill="#8ec5fc"
+          fillOpacity="1"
+          d="M0,160L30,165.3C60,171,120,181,180,181.3C240,181,300,171,360,154.7C420,139,480,117,540,106.7C600,96,660,96,720,101.3C780,107,840,117,900,138.7C960,160,1020,192,1080,181.3C1140,171,1200,117,1260,117.3C1320,117,1380,171,1410,197.3L1440,224L1440,320L1410,320C1380,320,1320,320,1260,320C1200,320,1140,320,1080,320C1020,320,960,320,900,320C840,320,780,320,720,320C660,320,600,320,540,320C480,320,420,320,360,320C300,320,240,320,180,320C120,320,60,320,30,320L0,320Z"
+        ></path>
+      </svg>
     </div>
   );
 };

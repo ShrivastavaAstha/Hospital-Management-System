@@ -8,6 +8,7 @@ import {
 } from "react-router-dom";
 
 import Dashboard from "./pages/Dashboard";
+import Home from "./pages/Home";
 import HomeRedirect from "./pages/HomeRedirect";
 import DoctorDashboard from "./pages/DoctorDashboard";
 import DoctorAppointments from "./pages/DoctorAppointment";
@@ -29,7 +30,8 @@ function App() {
     <Router>
       {/* All your routes */}
       <Routes>
-        <Route path="/" element={<HomeRedirect />} />
+        <Route path="/" element={<Home />} />
+        <Route path="/redirect" element={<HomeRedirect />} />
         <Route path="/auth" element={<Auth />} />
         <Route
           path="/dashboard"
@@ -51,7 +53,7 @@ function App() {
           path="/doctor-dashboard/appointments"
           element={<DoctorAppointments />}
         />
-        <Route path="/doctor-dashboard/profile" element={<DoctorProfile />} />
+        <Route path="/doctor-dashboardprofile" element={<DoctorProfile />} />
         <Route
           path="/patient-dashboard"
           element={

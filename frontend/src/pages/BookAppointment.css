@@ -1,0 +1,114 @@
+.appointment-container {
+  min-height: 100vh;
+  background: linear-gradient(to right, #fef9f9, #eaf6ff);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 40px 20px;
+  font-family: "Segoe UI", sans-serif;
+}
+
+.appointment-card {
+  width: 100%;
+  max-width: 900px;
+  background: white;
+  padding: 40px;
+  border-radius: 20px;
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.08);
+  animation: fadeIn 0.6s ease-in-out;
+}
+
+.appointment-card h2 {
+  text-align: center;
+  font-size: 28px;
+  margin-bottom: 30px;
+  color: #333;
+}
+
+.symptom-select {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 30px;
+}
+
+.symptom-select label {
+  font-size: 16px;
+  margin-bottom: 8px;
+  color: #444;
+}
+
+.symptom-select select {
+  padding: 10px 16px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  width: 250px;
+  font-size: 15px;
+}
+
+.doctor-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 20px;
+  margin-top: 20px;
+}
+
+.doctor-card {
+  background: #f0f8ff;
+  border: 1px solid #dceeff;
+  border-radius: 15px;
+  padding: 20px;
+  text-align: center;
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.06);
+  transition: all 0.3s ease;
+}
+
+.doctor-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 20px rgba(0, 0, 0, 0.1);
+}
+
+.doctor-card h3 {
+  font-size: 18px;
+  color: #1e3a8a;
+  margin-bottom: 8px;
+}
+
+.doctor-card p {
+  font-size: 14px;
+  color: #555;
+  margin-bottom: 12px;
+}
+
+.doctor-card button {
+  padding: 10px 20px;
+  background-color: #2563eb;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.3s ease;
+}
+
+.doctor-card button:hover {
+  background-color: #1d4ed8;
+}
+
+.no-doctor-msg {
+  text-align: center;
+  color: #777;
+  font-size: 15px;
+  margin-top: 20px;
+}
+
+@keyframes fadeIn {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}

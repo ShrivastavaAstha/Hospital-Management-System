@@ -1,32 +1,69 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import LogoutButton from "../components/LogoutButton";
+import "./PatientDashboard.css";
 
 const PatientDashboard = () => {
   const user = JSON.parse(localStorage.getItem("user"));
   const navigate = useNavigate();
 
-  return (
-    <div className="bg-gray-100 dark:bg-gray-800 p-4 rounded-lg">
-      <div className="p-6">
-        <LogoutButton />
-        <h2 className="text-2xl font-semibold mb-4">Welcome, {user.name} 🧑‍⚕️</h2>
-        <p className="mb-6 text-gray-600">
-          You can book appointments and view your history below.
-        </p>
+  // Fake preview appointment data (replace with real API later)
+  const nextAppointment = {
+    doctor: "Dr. Sharma",
+    date: "2025-07-18",
+    time: "10:30 AM",
+    status: "Confirmed",
+  };
 
-        <div className="flex gap-6">
+  return (
+    <div className="patient-dashboard-container">
+      <div className="glass-card">
+        <div className="dashboard-header">
+          <div>
+            <h1>👋 Welcome, {user.name}</h1>
+            <p className="subtext">
+              You can manage your health, book new appointments, and view your
+              history below.
+            </p>
+          </div>
+          <LogoutButton />
+        </div>
+
+        {/* Next Appointment Section */}
+        <div className="next-appointment">
+          <h2>🗓️ Your Next Appointment</h2>
+          {nextAppointment ? (
+            <div className="appointment-card">
+              <p>
+                <strong>Doctor:</strong> {nextAppointment.doctor}
+              </p>
+              <p>
+                <strong>Date:</strong> {nextAppointment.date}
+              </p>
+              <p>
+                <strong>Time:</strong> {nextAppointment.time}
+              </p>
+              <p>
+                <strong>Status:</strong> {nextAppointment.status}
+              </p>
+            </div>
+          ) : (
+            <p>No upcoming appointments.</p>
+          )}
+        </div>
+
+        <div className="action-buttons">
           <button
-            className="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700"
+            className="book-btn"
             onClick={() => navigate("/book-appointment")}
           >
-            Book Appointment
+            ➕ Book Appointment
           </button>
           <button
-            className="bg-green-600 text-white px-6 py-2 rounded hover:bg-green-700"
+            className="history-btn"
             onClick={() => navigate("/my-appointments")}
           >
-            My Appointments
+            📖 View Appointments
           </button>
         </div>
       </div>

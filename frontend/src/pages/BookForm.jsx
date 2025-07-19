@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import "./BookForm.css";
 import { useParams, useNavigate } from "react-router-dom";
 
 const BookForm = () => {
@@ -139,38 +140,34 @@ const BookForm = () => {
   };
 
   if (!doctor)
-    return <div className="text-center mt-10">Loading doctor info...</div>;
+    return (
+      <div className="booking-container">
+        <div className="loader">Loading doctor info...</div>
+      </div>
+    );
 
   return (
-    <div className="bg-gray-100 dark:bg-gray-800 p-4 rounded-lg">
-      <div className="max-w-md mx-auto mt-10 p-6 border rounded-xl shadow">
-        <h2 className="text-xl font-semibold mb-4 text-center">
-          Book with {doctor.name}
-        </h2>
+    <div className="booking-container">
+      <div className="booking-card">
+        <h2>🩺 Book with {doctor.name}</h2>
 
-        {message && (
-          <p className="text-center mb-4 text-sm text-green-600 font-medium">
-            {message}
-          </p>
-        )}
+        {message && <p className="success-msg">{message}</p>}
 
         <form onSubmit={handleSubmit}>
-          <label className="block mb-2 text-sm font-medium">Select Date:</label>
+          <label>Select Date:</label>
           <input
             type="date"
             value={date}
             min={new Date().toISOString().split("T")[0]}
             onChange={(e) => setDate(e.target.value)}
             required
-            className="w-full mb-4 p-2 border rounded"
           />
 
-          <label className="block mb-2 text-sm font-medium">Select Time:</label>
+          <label>Select Time:</label>
           <select
             value={time}
             onChange={(e) => setTime(e.target.value)}
             required
-            className="w-full mb-4 p-2 border rounded"
           >
             <option value="">-- Select a time --</option>
             {timeSlots.map((slot) => (
@@ -184,12 +181,7 @@ const BookForm = () => {
             ))}
           </select>
 
-          <button
-            type="submit"
-            className="w-full bg-green-600 text-white py-2 rounded hover:bg-green-700"
-          >
-            Confirm Appointment
-          </button>
+          <button type="submit">✅ Confirm Appointment</button>
         </form>
       </div>
     </div>
