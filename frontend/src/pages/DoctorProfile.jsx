@@ -16,7 +16,10 @@ const DoctorProfile = () => {
   useEffect(() => {
     axios
       .get(`http://localhost:5000/api/doctors/profile/${doctorId}`)
-      .then((res) => setDoctor(res.data))
+      .then((res) => {
+        console.log("Doctor Data:", res.data);
+        setDoctor(res.data);
+      })
       .catch((err) => alert("Failed to load doctor data"));
   }, []);
 
@@ -42,7 +45,7 @@ const DoctorProfile = () => {
 
   const handleImageUpload = async () => {
     const formData = new FormData();
-    formData.append("profilePicture", selectedImage);
+    formData.append("profilephoto", selectedImage);
 
     try {
       await axios.put(
@@ -59,20 +62,59 @@ const DoctorProfile = () => {
     <div className="profile-container">
       <h2>Doctor Profile</h2>
 
+      {/* Profile photo shown in circular shape at top */}
+      {/* {doctor.profilephoto && ( */}
+      {/* <div className="profile-photo-container">
+          <img
+            src={`http://localhost:5000/uploads/${doctor.profilephoto}`}
+            alt="Profile"
+            className="profile-img-circle"
+          />
+        </div> */}
+      {doctor.profilephoto && (
+        <div className="profile-photo-container">
+          <img
+            src={
+              doctor.profilephotoPreview // show selected image before uploading
+                ? doctor.profilephotoPreview
+                : doctor.profilephoto // show uploaded image
+                ? `http://localhost:5000/uploads/${doctor.profilephoto}`
+                : `http://localhost:5000/uploads/default.png` // fallback
+            }
+            alt="Profile"
+            className="profile-img-circle"
+          />
+        </div>
+      )}
+
       <div className="form-group">
         <label>Upload Profile Picture:</label>
-        <input
+        {/* <input
           type="file"
           onChange={(e) => setSelectedImage(e.target.files[0])}
+        /> */}
+        <input
+          type="file"
+          accept="image/*"
+          onChange={(e) => {
+            const file = e.target.files[0];
+            setSelectedImage(file);
+
+            // Show preview immediately
+            if (file) {
+              const reader = new FileReader();
+              reader.onloadend = () => {
+                setDoctor((prev) => ({
+                  ...prev,
+                  profilephotoPreview: reader.result,
+                }));
+              };
+              reader.readAsDataURL(file);
+            }
+          }}
         />
+
         <button onClick={handleImageUpload}>Upload</button>
-        {doctor.profilePicture && (
-          <img
-            src={`http://localhost:5000/uploads/${doctor.profilePicture}`}
-            alt="Profile"
-            className="profile-img"
-          />
-        )}
       </div>
 
       <div className="form-group">
@@ -109,21 +151,17 @@ const DoctorProfile = () => {
       </div>
 
       <div className="form-group">
-        <label>Bio:</label>
-        <textarea
-          name="bio"
-          value={doctor.bio || ""}
-          onChange={handleChange}
-        ></textarea>
-      </div>
-
-      <div className="form-group">
         <label>Availability:</label>
-        <input
+        <select
           name="availability"
           value={doctor.availability || ""}
           onChange={handleChange}
-        />
+        >
+          <option value="">Select Availability</option>
+          <option value="Morning">Morning</option>
+          <option value="Evening">Evening</option>
+          <option value="Both">Both</option>
+        </select>
       </div>
 
       <button onClick={handleSave}>Save Changes</button>

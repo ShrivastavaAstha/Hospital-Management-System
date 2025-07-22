@@ -11,12 +11,21 @@ const Auth = () => {
     email: "",
     password: "",
     role: "patient",
+    specialization: "",
+    phone: "",
+    availability: "",
+    profilePhoto: "",
   });
   const [error, setError] = useState("");
   const navigate = useNavigate();
 
   const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
+    const { name, value, files } = e.target;
+    if (name === "profilePhoto") {
+      setForm({ ...form, [name]: files[0] });
+    } else {
+      setForm({ ...form, [name]: value });
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -34,7 +43,6 @@ const Auth = () => {
           localStorage.setItem("doctorId", res.data.user._id);
         }
 
-        // 🎉 Show confetti
         confetti({
           particleCount: 150,
           spread: 70,
@@ -46,9 +54,17 @@ const Auth = () => {
         else if (role === "doctor") navigate("/doctor-dashboard");
         else navigate("/patient-dashboard");
       } else {
-        await axios.post("http://localhost:5000/api/auth/register", form);
+        const formData = new FormData();
+        for (let key in form) {
+          formData.append(key, form[key]);
+        }
 
-        // 🎉 Confetti on register too
+        await axios.post("http://localhost:5000/api/auth/register", formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        });
+
         confetti({
           particleCount: 120,
           spread: 90,
@@ -109,6 +125,54 @@ const Auth = () => {
               <option value="doctor">Doctor</option>
               <option value="admin">Admin</option>
             </select>
+          )}
+
+          {/* Show doctor-specific fields if role is doctor */}
+          {!isLogin && form.role === "doctor" && (
+            <>
+              <select
+                name="specialization"
+                value={form.specialization}
+                onChange={handleChange}
+                required
+              >
+                <option value="">Select Specialization</option>
+                <option value="Cardiologist">Cardiologist (Chest Pain)</option>
+                <option value="Dermatologist">Dermatologist (Skin Rash)</option>
+                <option value="General Physician">
+                  General Physician (Fever / Cough)
+                </option>
+                <option value="Dentist">Dentist (Toothache)</option>
+                <option value="Orthopedic">Orthopedic (Joint Pain)</option>
+                <option value="Ophthalmologist">
+                  Ophthalmologist (Eye Irritation)
+                </option>
+              </select>
+
+              <input
+                type="text"
+                name="phone"
+                placeholder="Phone Number"
+                value={form.phone}
+                onChange={handleChange}
+                required
+              />
+              <input
+                type="text"
+                name="availability"
+                placeholder="Availability (e.g. 9AM - 5PM)"
+                value={form.availability}
+                onChange={handleChange}
+                required
+              />
+              <input
+                type="file"
+                name="profilePhoto"
+                accept="image/*"
+                onChange={handleChange}
+                required
+              />
+            </>
           )}
 
           <button type="submit">{isLogin ? "Login" : "Register"}</button>

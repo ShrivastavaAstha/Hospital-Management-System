@@ -1,13 +1,13 @@
 const mongoose = require("mongoose");
 const Doctor = require("../models/Doctor");
-const User = require("../models/User"); // import your user model at the top
+const User = require("../models/User");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 
 // Create doctor
 exports.createDoctor = async (req, res) => {
   try {
-    const doctor = new Doctor(req.body);
+    const doctor = new User(req.body);
     await doctor.save();
     res.status(201).json(doctor);
   } catch (err) {
@@ -18,7 +18,7 @@ exports.createDoctor = async (req, res) => {
 // Get all doctors
 exports.getAllDoctors = async (req, res) => {
   try {
-    const doctors = await Doctor.find();
+    const doctors = await User.find();
     res.status(200).json(doctors);
   } catch (err) {
     res.status(500).json({ error: err.message });
@@ -29,7 +29,7 @@ exports.getAllDoctors = async (req, res) => {
 exports.deleteDoctor = async (req, res) => {
   try {
     const { id } = req.params;
-    await Doctor.findByIdAndDelete(id);
+    await User.findByIdAndDelete(id);
     res.status(200).json({ message: "Doctor deleted successfully" });
   } catch (err) {
     res.status(500).json({ error: err.message });
@@ -38,7 +38,7 @@ exports.deleteDoctor = async (req, res) => {
 
 exports.getDoctorById = async (req, res) => {
   try {
-    const doctor = await Doctor.findById(req.params.id);
+    const doctor = await User.findById(req.params.id);
     res.status(200).json(doctor);
     console.log("Requested doctor ID:", req.params.id);
   } catch (err) {
@@ -46,37 +46,37 @@ exports.getDoctorById = async (req, res) => {
   }
 };
 
-exports.registerDoctor = async (req, res) => {
-  try {
-    const { name, specialization, phone, email, password } = req.body;
+// exports.registerDoctor = async (req, res) => {
+//   try {
+//     const { name, specialization, phone, email, password } = req.body;
 
-    if (!name || !specialization || !phone || !email || !password) {
-      return res.status(400).json({ error: "All fields are required" });
-    }
+//     if (!name || !specialization || !phone || !email || !password) {
+//       return res.status(400).json({ error: "All fields are required" });
+//     }
 
-    const doctor = new Doctor({
-      _id: new mongoose.Types.ObjectId(), // ✅ Important fix
-      name,
-      specialization,
-      phone,
-      email,
-      password,
-    });
+//     const doctor = new Doctor({
+//       _id: new mongoose.Types.ObjectId(), // ✅ Important fix
+//       name,
+//       specialization,
+//       phone,
+//       email,
+//       password,
+//     });
 
-    await doctor.save();
+//     await doctor.save();
 
-    res.status(201).json({ message: "Doctor registered successfully", doctor });
-  } catch (err) {
-    console.error("Doctor register error:", err);
-    res.status(500).json({ error: err.message || "Failed to register doctor" });
-  }
-};
+//     res.status(201).json({ message: "Doctor registered successfully", doctor });
+//   } catch (err) {
+//     console.error("Doctor register error:", err);
+//     res.status(500).json({ error: err.message || "Failed to register doctor" });
+//   }
+// };
 
 // controllers/doctorController.js
 
 exports.getDoctorProfile = async (req, res) => {
   try {
-    const doctor = await Doctor.findById(req.user.id); // assuming `authMiddleware` sets req.user
+    const doctor = await User.findById(req.user.id); // assuming `authMiddleware` sets req.user
     if (!doctor) return res.status(404).json({ error: "Doctor not found" });
 
     res.json(doctor);
@@ -91,7 +91,7 @@ exports.doctorLogin = async (req, res) => {
   const { email, password } = req.body;
 
   try {
-    const doctor = await Doctor.findOne({ email });
+    const doctor = await User.findOne({ email });
 
     if (!doctor) return res.status(404).json({ error: "Doctor not found" });
 
@@ -113,18 +113,20 @@ exports.doctorLogin = async (req, res) => {
 
 //Doctor Profile update
 
+// GET full doctor profile
 exports.getDoctorProfile = async (req, res) => {
   try {
-    const user = await User.findById(req.params.id);
+    const { id } = req.params;
 
-    if (!user || user.role !== "doctor") {
+    const doctor = await User.findById(id).lean();
+    if (!doctor) {
       return res.status(404).json({ error: "Doctor not found" });
     }
 
-    res.json(user);
+    res.json(doctor);
   } catch (err) {
     console.error("Error fetching doctor profile:", err);
-    res.status(500).json({ error: "Failed to fetch profile" });
+    res.status(500).json({ error: "Server error" });
   }
 };
 
@@ -161,11 +163,54 @@ exports.updateDoctorPassword = async (req, res) => {
   res.json({ message: "Password updated successfully" });
 };
 
+// exports.updateDoctorProfilePic = async (req, res) => {
+//   const doctor = await User.findByIdAndUpdate(
+//     req.params.id,
+//     { profilePicture: req.file.filename },
+//     { new: true }
+//   );
+//   res.json(doctor);
+// };
+// controllers/doctorController.js
 exports.updateDoctorProfilePic = async (req, res) => {
-  const doctor = await User.findByIdAndUpdate(
-    req.params.id,
-    { profilePicture: req.file.filename },
-    { new: true }
-  );
-  res.json(doctor);
+  try {
+    const doctorId = req.params.id;
+
+    // 💡 Make sure file was uploaded
+    if (!req.file) {
+      return res.status(400).json({ message: "No file uploaded" });
+    }
+
+    const profilePhoto = req.file.filename;
+
+    const updatedDoctor = await User.findByIdAndUpdate(
+      doctorId,
+      { profilephoto: profilePhoto },
+      { new: true }
+    );
+
+    if (!updatedDoctor) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    res.status(200).json({
+      message: "Profile picture updated",
+      user: updatedDoctor,
+    });
+  } catch (error) {
+    console.error("Upload Error:", error);
+    res.status(500).json({ message: "Server Error" });
+  }
+};
+// In controllers/userController.js
+exports.getUserById = async (req, res) => {
+  try {
+    const user = await User.findOne({ _id: req.params.id, role: "doctor" });
+
+    if (!user) return res.status(404).json({ error: "User not found" });
+
+    res.status(200).json(user);
+  } catch (err) {
+    res.status(500).json({ error: "Server error" });
+  }
 };

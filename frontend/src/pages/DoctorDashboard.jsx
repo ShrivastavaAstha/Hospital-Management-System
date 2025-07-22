@@ -29,7 +29,16 @@ const DoctorDashboard = () => {
   return (
     <div className="doctor-dashboard-container">
       <header className="dashboard-header">
-        <h1>👨‍⚕️ Welcome, Dr. {doctor.name}</h1>
+        <img
+          src={
+            doctor.profilephoto
+              ? `http://localhost:5000/uploads/${doctor.profilephoto}`
+              : "/default.png"
+          }
+          alt="Doctor Profile"
+          className="doctor-profile-pic"
+        />
+        <h1>Welcome, Dr. {doctor.name}</h1>
         <button onClick={() => navigate("/doctor/profile")}>My Profile</button>
       </header>
 

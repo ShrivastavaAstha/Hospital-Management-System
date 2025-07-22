@@ -18,6 +18,8 @@ const BookForm = () => {
 
   useEffect(() => {
     const doctorId = id;
+    console.log("Doctor ID:", doctorId);
+
     axios
       .get(`http://localhost:5000/api/doctors/${doctorId}`)
       .then((res) => {
@@ -32,7 +34,7 @@ const BookForm = () => {
   useEffect(() => {
     if (doctor && date) {
       axios
-        .get(`http://localhost:5000/api/appointments/doctor/booked-slots`, {
+        .get(`http://localhost:5000/api/appointments/user/booked-slots`, {
           params: { doctorId: doctor._id, date },
         })
         .then((res) => setBookedSlots(res.data))

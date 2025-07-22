@@ -108,3 +108,11 @@ table th {
   background: #f7f9fb;
   color: #333;
 }
+
+.doctor-profile-pic {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-right: 10px;
+}

@@ -10,6 +10,14 @@ const userSchema = new mongoose.Schema({
     default: "patient",
   },
   profilephoto: { type: String },
+  specialization: { type: String },
+  phone: { type: String },
+  availability: {
+    type: String,
+    enum: ["Morning", "Evening", "Both"],
+    default: "Both",
+  },
+
   createdAt: {
     type: Date,
     default: Date.now,
