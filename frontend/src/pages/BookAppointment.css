@@ -112,3 +112,19 @@
     opacity: 1;
   }
 }
+.doctor-card {
+  border: 1px solid #ddd;
+  padding: 16px;
+  border-radius: 12px;
+  text-align: center;
+  background: #fff;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.doctor-img {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 50%;
+  margin-bottom: 10px;
+}

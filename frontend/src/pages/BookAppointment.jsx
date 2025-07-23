@@ -61,8 +61,24 @@ const BookAppointment = () => {
           <div className="doctor-grid">
             {filteredDoctors.map((doc) => (
               <div className="doctor-card" key={doc._id}>
+                <img
+                  src={`http://localhost:5000/uploads/${doc.profilephoto}`}
+                  onError={(e) => {
+                    e.target.onerror = null;
+                    e.target.src =
+                      "https://www.w3schools.com/howto/img_avatar.png"; // reliable fallback image
+                  }}
+                  alt="Doctor"
+                  className="doctor-img"
+                />
+
                 <h3>{doc.name}</h3>
-                <p>{doc.specialization}</p>
+                <p>
+                  <strong>Specialization:</strong> {doc.specialization}
+                </p>
+                <p>
+                  <strong>Availability:</strong> {doc.availability}
+                </p>
                 <button
                   onClick={() => (window.location.href = `/book/${doc._id}`)}
                 >
