@@ -18,7 +18,7 @@ exports.createDoctor = async (req, res) => {
 // Get all doctors
 exports.getAllDoctors = async (req, res) => {
   try {
-    const doctors = await User.find();
+    const doctors = await User.find({ role: "doctor" });
     res.status(200).json(doctors);
   } catch (err) {
     res.status(500).json({ error: err.message });
