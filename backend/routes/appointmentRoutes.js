@@ -1,5 +1,5 @@
 const express = require("express");
-
+const User = require("../models/User");
 const router = express.Router();
 const {
   bookAppointment,
@@ -19,7 +19,7 @@ router.get("/doctor/:doctorId", getAppointmentsForDoctor);
 router.get("/test/:id", async (req, res) => {
   try {
     const doctorId = req.params.id;
-    const doctor = await Doctor.findById(doctorId);
+    const doctor = await User.findById(doctorId);
     res.json(doctor);
   } catch (err) {
     res.status(500).json({ error: err.message });

@@ -17,7 +17,7 @@ const {
 
 const { verifyToken, isAdmin } = require("../middlewares/authMiddleware");
 const authMiddleware = require("../middlewares/authDoctor");
-const Doctor = require("../models/Doctor");
+// const Doctor = require("../models/Doctor");
 const User = require("../models/User");
 const bcrypt = require("bcryptjs");
 

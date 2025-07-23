@@ -1,5 +1,4 @@
 const Appointment = require("../models/Appointment");
-
 const User = require("../models/User");
 // Create Appointment
 // exports.bookAppointment = async (req, res) => {
@@ -70,9 +69,14 @@ exports.getAppointmentsByPatientId = async (req, res) => {
   try {
     const appointments = await Appointment.find({
       patientId: req.params.patientId,
-    })
-      .populate("doctorId", "name specialization photo email")
-      .populate("patientId", "name");
+    }).populate({
+      path: "doctorId",
+      model: "User",
+      select: "name specialization email",
+    });
+
+    // .populate("doctorId", "name specialization photo email")
+    // .populate("patientId", "name");
 
     res.status(200).json(appointments);
   } catch (err) {

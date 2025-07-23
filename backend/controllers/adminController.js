@@ -1,11 +1,11 @@
-const Doctor = require("../models/Doctor");
+const User = require("../models/User");
 const Appointment = require("../models/Appointment");
 const Bill = require("../models/Bill");
 
 // Admin dashboard stats
 exports.getDashboardStats = async (req, res) => {
   try {
-    const totalDoctors = await Doctor.countDocuments();
+    const totalDoctors = await User.countDocuments();
     const totalAppointments = await Appointment.countDocuments();
     const totalBills = await Bill.countDocuments();
 
@@ -53,7 +53,7 @@ exports.getDashboardStats = async (req, res) => {
 // Example: controllers/doctorController.js
 exports.deleteDoctor = async (req, res) => {
   try {
-    await Doctor.findByIdAndDelete(req.params.id);
+    await User.findByIdAndDelete(req.params.id);
     res.status(200).json({ message: "Doctor deleted" });
   } catch (err) {
     res.status(500).json({ error: "Failed to delete doctor" });

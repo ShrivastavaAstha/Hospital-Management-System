@@ -38,12 +38,12 @@ const MyAppointments = () => {
             {appointments.map((appt) => (
               <div className="appointment-card" key={appt._id}>
                 <div className="doctor-info">
-                  <img
+                  {/* <img
                     src={
                       appt.doctorId?.photo || "https://via.placeholder.com/50"
                     }
                     alt="Doctor"
-                  />
+                  /> */}
                   <div>
                     <h4>{appt.doctorId?.name}</h4>
                     <p>{appt.doctorId?.specialization}</p>
