@@ -51,7 +51,7 @@ const Dashboard = () => {
     e.preventDefault();
     try {
       const res = await axios.post(
-        "http://localhost:5000/api/doctors/add",
+        "http://localhost:5000/api/admin/doctors/add",
         {
           name,
           specialization,

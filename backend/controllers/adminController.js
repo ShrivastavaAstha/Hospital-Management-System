@@ -1,6 +1,7 @@
 const User = require("../models/User");
 const Appointment = require("../models/Appointment");
 const Bill = require("../models/Bill");
+const bcrypt = require("bcryptjs");
 
 // Admin dashboard stats
 exports.getDashboardStats = async (req, res) => {
@@ -95,5 +96,40 @@ exports.deleteBill = async (req, res) => {
     res.json({ message: "Bill deleted" });
   } catch (err) {
     res.status(500).json({ error: "Failed to delete bill" });
+  }
+};
+
+exports.adminAddDoctor = async (req, res) => {
+  try {
+    const { name, email, phone, specialization, password } = req.body;
+
+    if (!name || !email || !phone || !specialization || !password) {
+      return res.status(400).json({ error: "All fields are required" });
+    }
+
+    const existingDoctor = await User.findOne({ email });
+    if (existingDoctor) {
+      return res
+        .status(400)
+        .json({ error: "Doctor with this email already exists" });
+    }
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    const doctor = new User({
+      name,
+      email,
+      phone,
+      specialization,
+      password: hashedPassword,
+      role: "doctor", // Ensure role is set to doctor
+    });
+
+    await doctor.save();
+
+    res.status(201).json({ message: "Doctor added successfully", doctor });
+  } catch (err) {
+    console.error("Error adding doctor by admin:", err.message);
+    res.status(500).json({ error: "Server error" });
   }
 };
