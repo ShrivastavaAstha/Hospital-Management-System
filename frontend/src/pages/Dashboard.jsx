@@ -12,7 +12,7 @@ import {
   ResponsiveContainer,
 } from "recharts";
 import { useNavigate } from "react-router-dom";
-import "./Dashboard.css"; // 🟢 Make sure this path is correct
+import "./Dashboard.css";
 
 const Dashboard = () => {
   const [stats, setStats] = useState(null);
@@ -20,6 +20,7 @@ const Dashboard = () => {
   const [appointments, setAppointments] = useState([]);
   const [name, setName] = useState("");
   const [specialization, setSpecialization] = useState("");
+  const [availability, setAvailability] = useState("");
   const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -55,6 +56,7 @@ const Dashboard = () => {
         {
           name,
           specialization,
+          availability,
           phone,
           email,
           password,
@@ -67,6 +69,7 @@ const Dashboard = () => {
       setDoctors([...doctors, res.data.doctor]);
       setName("");
       setSpecialization("");
+      setAvailability("");
       setPhone("");
       setEmail("");
       setPassword("");
@@ -152,18 +155,50 @@ const Dashboard = () => {
             onChange={(e) => setName(e.target.value)}
             placeholder="Doctor Name"
             required
+            type="text"
           />
-          <input
+          <select
             value={specialization}
             onChange={(e) => setSpecialization(e.target.value)}
-            placeholder="Specialization"
             required
-          />
+          >
+            <option value="">Select Specialization</option>
+            <option value="Cardiologist">Cardiologist (Chest Pain)</option>
+            <option value="Dermatologist">Dermatologist (Skin Rash)</option>
+            <option value="General Physician">
+              General Physician (Fever / Cough)
+            </option>
+            <option value="Dentist">Dentist (Toothache)</option>
+            <option value="Orthopedic">Orthopedic (Joint Pain)</option>
+            <option value="Ophthalmologist">
+              Ophthalmologist (Eye Irritation)
+            </option>
+          </select>
+          <select
+            name="availability"
+            value={availability}
+            onChange={(e) => setAvailability(e.target.value)}
+            required
+          >
+            <option value="">Select Availability</option>
+            <option value="Morning">Morning</option>
+            <option value="Evening">Evening</option>
+            <option value="Both">Both</option>
+          </select>
+
           <input
             value={phone}
-            onChange={(e) => setPhone(e.target.value)}
+            onChange={(e) => {
+              const val = e.target.value;
+              if (/^\d{0,10}$/.test(val)) {
+                setPhone(val);
+              }
+            }}
             placeholder="Phone"
             required
+            type="number"
+            pattern="\d{10}"
+            title="Phone number must be exactly 10 digits"
           />
           <input
             value={email}

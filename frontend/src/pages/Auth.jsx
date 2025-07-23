@@ -150,21 +150,31 @@ const Auth = () => {
               </select>
 
               <input
-                type="text"
+                type="number"
                 name="phone"
                 placeholder="Phone Number"
                 value={form.phone}
-                onChange={handleChange}
+                onChange={(e) => {
+                  const val = e.target.value;
+                  if (/^\d{0,10}$/.test(val)) {
+                    setForm({ ...form, phone: val });
+                  }
+                }}
+                pattern="\d{10}"
+                title="Phone number must be exactly 10 digits"
                 required
               />
-              <input
-                type="text"
+              <select
                 name="availability"
-                placeholder="Availability (e.g. 9AM - 5PM)"
                 value={form.availability}
                 onChange={handleChange}
                 required
-              />
+              >
+                <option value="">Select Availability</option>
+                <option value="Morning">Morning</option>
+                <option value="Evening">Evening</option>
+                <option value="Both">Both</option>
+              </select>
               <input
                 type="file"
                 name="profilePhoto"
