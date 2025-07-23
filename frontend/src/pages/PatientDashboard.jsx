@@ -1,19 +1,27 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 import LogoutButton from "../components/LogoutButton";
 import "./PatientDashboard.css";
 
 const PatientDashboard = () => {
   const user = JSON.parse(localStorage.getItem("user"));
   const navigate = useNavigate();
+  const [nextAppointment, setNextAppointment] = useState(null);
 
-  // Fake preview appointment data (replace with real API later)
-  const nextAppointment = {
-    doctor: "Dr. Sharma",
-    date: "2025-07-18",
-    time: "10:30 AM",
-    status: "Confirmed",
-  };
+  useEffect(() => {
+    const fetchNextAppointment = async () => {
+      try {
+        const res = await axios.get(
+          `http://localhost:5000/api/appointments/patient/next-appointment/${user._id}`
+        );
+        setNextAppointment(res.data);
+      } catch (err) {
+        console.error("Failed to fetch next appointment:", err);
+      }
+    };
+    fetchNextAppointment();
+  }, [user._id]);
 
   return (
     <div className="patient-dashboard-container">
@@ -35,16 +43,17 @@ const PatientDashboard = () => {
           {nextAppointment ? (
             <div className="appointment-card">
               <p>
-                <strong>Doctor:</strong> {nextAppointment.doctor}
+                <strong>Doctor:</strong>{" "}
+                {nextAppointment.doctorId?.name || "N/A"}
               </p>
               <p>
-                <strong>Date:</strong> {nextAppointment.date}
+                <strong>Date:</strong> {nextAppointment.appointmentDate}
               </p>
               <p>
-                <strong>Time:</strong> {nextAppointment.time}
+                <strong>Time:</strong> {nextAppointment.appointmentTime}
               </p>
               <p>
-                <strong>Status:</strong> {nextAppointment.status}
+                <strong>Status:</strong> {nextAppointment.paymentStatus}
               </p>
             </div>
           ) : (

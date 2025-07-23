@@ -123,3 +123,37 @@ exports.getAppointmentsForDoctor = async (req, res) => {
     res.status(500).json({ error: "Failed to fetch appointments" });
   }
 };
+
+exports.getNextAppointmentForPatient = async (req, res) => {
+  try {
+    const userId = req.params.userId;
+
+    const now = new Date();
+
+    // Fetch all upcoming appointments
+    const appointments = await Appointment.find({
+      patientId: userId,
+    }).populate("doctorId", "name");
+
+    // Filter out appointments that are in the past
+    const upcoming = appointments.filter((a) => {
+      const dateTime = new Date(`${a.appointmentDate} ${a.appointmentTime}`);
+      return dateTime >= now;
+    });
+
+    // Sort by date + time
+    upcoming.sort((a, b) => {
+      const dateA = new Date(`${a.appointmentDate} ${a.appointmentTime}`);
+      const dateB = new Date(`${b.appointmentDate} ${b.appointmentTime}`);
+      return dateA - dateB;
+    });
+
+    if (upcoming.length === 0) {
+      return res.status(200).json(null);
+    }
+
+    res.status(200).json(upcoming[0]); // first one is next appointment
+  } catch (err) {
+    res.status(500).json({ error: "Failed to fetch next appointment" });
+  }
+};

@@ -8,6 +8,7 @@ const {
   getAppointmentsByPatientId,
   getDoctorBookedSlots,
   getAppointmentsForDoctor,
+  getNextAppointmentForPatient,
 } = require("../controllers/appointmentController");
 
 router.post("/book", bookAppointment); // POST /api/appointments/book
@@ -25,5 +26,7 @@ router.get("/test/:id", async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 });
+// Get next appointment for a patient
+router.get("/patient/next-appointment/:userId", getNextAppointmentForPatient);
 
 module.exports = router;
