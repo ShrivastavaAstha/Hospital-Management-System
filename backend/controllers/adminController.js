@@ -51,7 +51,6 @@ exports.getDashboardStats = async (req, res) => {
   }
 };
 
-// Example: controllers/doctorController.js
 exports.deleteDoctor = async (req, res) => {
   try {
     await User.findByIdAndDelete(req.params.id);
@@ -122,7 +121,7 @@ exports.adminAddDoctor = async (req, res) => {
       phone,
       specialization,
       password: hashedPassword,
-      role: "doctor", // Ensure role is set to doctor
+      role: "doctor",
     });
 
     await doctor.save();

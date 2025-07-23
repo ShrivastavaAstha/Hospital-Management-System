@@ -1,9 +1,8 @@
 const express = require("express");
 const router = express.Router();
-const upload = require("../middlewares/uploadMiddleware.js"); // ✅ FIXED
+const upload = require("../middlewares/uploadMiddleware.js");
 
 const {
-  createDoctor,
   getAllDoctors,
   deleteDoctor,
   getDoctorById,
@@ -11,15 +10,11 @@ const {
   updateDoctorProfile,
   updateDoctorPassword,
   updateDoctorProfilePic,
-  registerDoctor,
   doctorLogin,
 } = require("../controllers/doctorController");
 
-const { verifyToken, isAdmin } = require("../middlewares/authMiddleware");
 const authMiddleware = require("../middlewares/authDoctor");
-// const Doctor = require("../models/Doctor");
 const User = require("../models/User");
-const bcrypt = require("bcryptjs");
 
 // ✅ Doctor Login
 router.post("/login", doctorLogin);
@@ -36,15 +31,9 @@ router.get("/profile", authMiddleware, async (req, res) => {
   }
 });
 
-// ✅ Only keep this one to add doctor with registerDoctor function
-// router.post("/add", registerDoctor);
-
 router.get("/", getAllDoctors);
 router.delete("/:id", deleteDoctor);
 router.get("/:id", getDoctorById);
-// In routes/userRoutes.js or similar
-// router.get("/:id", getUserById);
-
 router.get("/profile/:id", getDoctorProfile);
 router.put("/profile/:id", updateDoctorProfile);
 router.put("/password/:id", updateDoctorPassword);

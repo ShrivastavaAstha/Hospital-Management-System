@@ -1,15 +1,5 @@
 const Appointment = require("../models/Appointment");
 const User = require("../models/User");
-// Create Appointment
-// exports.bookAppointment = async (req, res) => {
-//   try {
-//     const appointment = new Appointment(req.body);
-//     await appointment.save();
-//     res.status(201).json(appointment);
-//   } catch (err) {
-//     res.status(400).json({ error: err.message });
-//   }
-// };
 
 // bookAppointment
 exports.bookAppointment = async (req, res) => {
@@ -74,10 +64,6 @@ exports.getAppointmentsByPatientId = async (req, res) => {
       model: "User",
       select: "name specialization email",
     });
-
-    // .populate("doctorId", "name specialization photo email")
-    // .populate("patientId", "name");
-
     res.status(200).json(appointments);
   } catch (err) {
     res.status(500).json({ error: err.message });
@@ -98,7 +84,6 @@ exports.getDoctorBookedSlots = async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 };
-// controllers/appointmentController.js
 
 // GET /api/appointments/doctor/:id
 exports.getAppointmentsForDoctor = async (req, res) => {

@@ -3,7 +3,7 @@ const router = express.Router();
 const { getDashboardStats } = require("../controllers/adminController");
 const { deleteDoctor } = require("../controllers/adminController");
 const authMiddleware = require("../middlewares/authMiddleware");
-// ✅ Add these 2 middlewares:
+
 const { verifyToken, isAdmin } = require("../middlewares/authMiddleware");
 
 const {

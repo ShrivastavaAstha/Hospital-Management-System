@@ -15,8 +15,6 @@ app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 const doctorRoutes = require("./routes/doctorRoutes");
 app.use("/api/doctors", doctorRoutes);
 
-// app.use("/api/users", require("./routes/doctorRoutes"));
-
 app.use("/uploads", express.static("uploads")); // to serve image
 
 app.use("/api/doctors", doctorRoutes);

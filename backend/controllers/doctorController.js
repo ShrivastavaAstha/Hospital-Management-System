@@ -1,5 +1,4 @@
 const mongoose = require("mongoose");
-// const Doctor = require("../models/Doctor");
 const User = require("../models/User");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
@@ -45,34 +44,6 @@ exports.getDoctorById = async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 };
-
-// exports.registerDoctor = async (req, res) => {
-//   try {
-//     const { name, specialization, phone, email, password } = req.body;
-
-//     if (!name || !specialization || !phone || !email || !password) {
-//       return res.status(400).json({ error: "All fields are required" });
-//     }
-
-//     const doctor = new Doctor({
-//       _id: new mongoose.Types.ObjectId(), // ✅ Important fix
-//       name,
-//       specialization,
-//       phone,
-//       email,
-//       password,
-//     });
-
-//     await doctor.save();
-
-//     res.status(201).json({ message: "Doctor registered successfully", doctor });
-//   } catch (err) {
-//     console.error("Doctor register error:", err);
-//     res.status(500).json({ error: err.message || "Failed to register doctor" });
-//   }
-// };
-
-// controllers/doctorController.js
 
 exports.getDoctorProfile = async (req, res) => {
   try {
@@ -163,14 +134,6 @@ exports.updateDoctorPassword = async (req, res) => {
   res.json({ message: "Password updated successfully" });
 };
 
-// exports.updateDoctorProfilePic = async (req, res) => {
-//   const doctor = await User.findByIdAndUpdate(
-//     req.params.id,
-//     { profilePicture: req.file.filename },
-//     { new: true }
-//   );
-//   res.json(doctor);
-// };
 // controllers/doctorController.js
 exports.updateDoctorProfilePic = async (req, res) => {
   try {
