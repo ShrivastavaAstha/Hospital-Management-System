@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useRef, useEffect, useState } from "react";
 import axios from "axios";
 import {
   LineChart,
@@ -15,6 +15,16 @@ import { useNavigate } from "react-router-dom";
 import "./Dashboard.css";
 
 const Dashboard = () => {
+  const doctorSectionRef = useRef(null);
+  const appointmentSectionRef = useRef(null);
+  const scrollToDoctors = () => {
+    doctorSectionRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
+
+  const scrollToAppointments = () => {
+    appointmentSectionRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
+
   const [stats, setStats] = useState(null);
   const [doctors, setDoctors] = useState([]);
   const [appointments, setAppointments] = useState([]);
@@ -117,9 +127,22 @@ const Dashboard = () => {
       {/* Sidebar */}
       <div className="sidebar">
         <h2>Admin Dashboard</h2>
-        <a href="/dashboard">Dashboard</a>
-        <a href="/doctors">Doctors</a>
-        <a href="/appointments">Appointments</a>
+        {/* <a href="/dashboard">Dashboard</a> */}
+        <button
+          onClick={scrollToDoctors}
+          className="sidebar-link"
+          style={{ backgroundColor: "transparent" }}
+        >
+          Doctors
+        </button>
+        <button
+          onClick={scrollToAppointments}
+          className="sidebar-link"
+          style={{ backgroundColor: "transparent" }}
+        >
+          Appointments
+        </button>
+
         <button onClick={handleLogout} style={{ marginTop: "40px" }}>
           Logout
         </button>
@@ -246,7 +269,10 @@ const Dashboard = () => {
         </div>
 
         {/* Doctor Table */}
-        <h3 style={{ marginTop: "40px" }}>Manage Doctors</h3>
+        <h3 ref={doctorSectionRef} style={{ marginTop: "40px" }}>
+          Manage Doctors
+        </h3>
+
         {doctors.length === 0 ? (
           <p>No doctors found.</p>
         ) : (
@@ -278,7 +304,10 @@ const Dashboard = () => {
         )}
 
         {/* Appointment Table */}
-        <h3 style={{ marginTop: "40px" }}>Appointments</h3>
+        <h3 ref={appointmentSectionRef} style={{ marginTop: "40px" }}>
+          Appointments
+        </h3>
+
         {appointments.length === 0 ? (
           <p>No appointments found.</p>
         ) : (
