@@ -34,6 +34,8 @@ const Dashboard = () => {
   const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [filterSpecialization, setFilterSpecialization] = useState("");
+
   const token = localStorage.getItem("token");
   const navigate = useNavigate();
 
@@ -153,7 +155,6 @@ const Dashboard = () => {
         <div className="topbar">
           <h1>Welcome, Admin</h1>
         </div>
-
         {/* Stats */}
         <div className="stats">
           <div className="stat-card">
@@ -169,7 +170,6 @@ const Dashboard = () => {
             <p>{stats.totalRevenue}</p>
           </div>
         </div>
-
         {/* Add Doctor */}
         <h3>Add New Doctor</h3>
         <form onSubmit={handleAddDoctor}>
@@ -238,7 +238,6 @@ const Dashboard = () => {
           />
           <button type="submit">Add Doctor</button>
         </form>
-
         {/* Charts */}
         <div className="section">
           <div className="chart-container">
@@ -267,11 +266,26 @@ const Dashboard = () => {
             </ResponsiveContainer>
           </div>
         </div>
-
         {/* Doctor Table */}
         <h3 ref={doctorSectionRef} style={{ marginTop: "40px" }}>
           Manage Doctors
         </h3>
+        <div style={{ marginBottom: "10px" }}>
+          <label htmlFor="filter">Filter by Specialization: </label>
+          <select
+            id="filter"
+            value={filterSpecialization}
+            onChange={(e) => setFilterSpecialization(e.target.value)}
+          >
+            <option value="">All</option>
+            <option value="Cardiologist">Cardiologist</option>
+            <option value="Dermatologist">Dermatologist</option>
+            <option value="General Physician">General Physician</option>
+            <option value="Dentist">Dentist</option>
+            <option value="Orthopedic">Orthopedic</option>
+            <option value="Ophthalmologist">Ophthalmologist</option>
+          </select>
+        </div>
 
         {doctors.length === 0 ? (
           <p>No doctors found.</p>
@@ -285,29 +299,33 @@ const Dashboard = () => {
               </tr>
             </thead>
             <tbody>
-              {doctors.map((doc) => (
-                <tr key={doc._id}>
-                  <td>{doc.name}</td>
-                  <td>{doc.specialization}</td>
-                  <td>
-                    <button
-                      className="action-btn"
-                      onClick={() => handleDeleteDoctor(doc._id)}
-                    >
-                      Delete
-                    </button>
-                  </td>
-                </tr>
-              ))}
+              {doctors
+                .filter((doc) =>
+                  filterSpecialization
+                    ? doc.specialization === filterSpecialization
+                    : true
+                )
+                .map((doc) => (
+                  <tr key={doc._id}>
+                    <td>{doc.name}</td>
+                    <td>{doc.specialization}</td>
+                    <td>
+                      <button
+                        className="action-btn"
+                        onClick={() => handleDeleteDoctor(doc._id)}
+                      >
+                        Delete
+                      </button>
+                    </td>
+                  </tr>
+                ))}
             </tbody>
           </table>
         )}
-
         {/* Appointment Table */}
         <h3 ref={appointmentSectionRef} style={{ marginTop: "40px" }}>
           Appointments
         </h3>
-
         {appointments.length === 0 ? (
           <p>No appointments found.</p>
         ) : (
