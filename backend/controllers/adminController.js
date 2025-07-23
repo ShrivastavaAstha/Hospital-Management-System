@@ -5,7 +5,7 @@ const Bill = require("../models/Bill");
 // Admin dashboard stats
 exports.getDashboardStats = async (req, res) => {
   try {
-    const totalDoctors = await User.countDocuments();
+    const totalDoctors = await User.countDocuments({ role: "doctor" });
     const totalAppointments = await Appointment.countDocuments();
     const totalBills = await Bill.countDocuments();
 
