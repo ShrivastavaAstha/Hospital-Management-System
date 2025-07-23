@@ -35,6 +35,10 @@ const Dashboard = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [filterSpecialization, setFilterSpecialization] = useState("");
+  const [filterDoctor, setFilterDoctor] = useState("");
+  const [filterPatient, setFilterPatient] = useState("");
+  const [filterDate, setFilterDate] = useState("");
+  const [filterTime, setFilterTime] = useState("");
 
   const token = localStorage.getItem("token");
   const navigate = useNavigate();
@@ -326,6 +330,38 @@ const Dashboard = () => {
         <h3 ref={appointmentSectionRef} style={{ marginTop: "40px" }}>
           Appointments
         </h3>
+        <div
+          style={{
+            marginBottom: "15px",
+            display: "flex",
+            gap: "10px",
+            flexWrap: "wrap",
+          }}
+        >
+          <input
+            type="text"
+            placeholder="Filter by Doctor Name"
+            value={filterDoctor}
+            onChange={(e) => setFilterDoctor(e.target.value)}
+          />
+          <input
+            type="text"
+            placeholder="Filter by Patient Name"
+            value={filterPatient}
+            onChange={(e) => setFilterPatient(e.target.value)}
+          />
+          <input
+            type="date"
+            value={filterDate}
+            onChange={(e) => setFilterDate(e.target.value)}
+          />
+          <input
+            type="time"
+            value={filterTime}
+            onChange={(e) => setFilterTime(e.target.value)}
+          />
+        </div>
+
         {appointments.length === 0 ? (
           <p>No appointments found.</p>
         ) : (
@@ -340,22 +376,36 @@ const Dashboard = () => {
               </tr>
             </thead>
             <tbody>
-              {appointments.map((appt) => (
-                <tr key={appt._id}>
-                  <td>{appt?.doctorId?.name || "Unknown"}</td>
-                  <td>{appt?.patientId?.name || "Unknown"}</td>
-                  <td>{appt.appointmentDate}</td>
-                  <td>{appt.appointmentTime}</td>
-                  <td>
-                    <button
-                      className="action-btn"
-                      onClick={() => handleDeleteAppointment(appt._id)}
-                    >
-                      Delete
-                    </button>
-                  </td>
-                </tr>
-              ))}
+              {appointments
+                .filter(
+                  (appt) =>
+                    (!filterDoctor ||
+                      appt?.doctorId?.name
+                        ?.toLowerCase()
+                        .includes(filterDoctor.toLowerCase())) &&
+                    (!filterPatient ||
+                      appt?.patientId?.name
+                        ?.toLowerCase()
+                        .includes(filterPatient.toLowerCase())) &&
+                    (!filterDate || appt?.appointmentDate === filterDate) &&
+                    (!filterTime || appt?.appointmentTime === filterTime)
+                )
+                .map((appt) => (
+                  <tr key={appt._id}>
+                    <td>{appt?.doctorId?.name || "Unknown"}</td>
+                    <td>{appt?.patientId?.name || "Unknown"}</td>
+                    <td>{appt.appointmentDate}</td>
+                    <td>{appt.appointmentTime}</td>
+                    <td>
+                      <button
+                        className="action-btn"
+                        onClick={() => handleDeleteAppointment(appt._id)}
+                      >
+                        Delete
+                      </button>
+                    </td>
+                  </tr>
+                ))}
             </tbody>
           </table>
         )}
