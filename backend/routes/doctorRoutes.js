@@ -18,6 +18,7 @@ const {
 const { verifyToken, isAdmin } = require("../middlewares/authMiddleware");
 const authMiddleware = require("../middlewares/authDoctor");
 const Doctor = require("../models/Doctor");
+const User = require("../models/User");
 const bcrypt = require("bcryptjs");
 
 // ✅ Doctor Login
@@ -42,7 +43,7 @@ router.get("/", getAllDoctors);
 router.delete("/:id", deleteDoctor);
 router.get("/:id", getDoctorById);
 // In routes/userRoutes.js or similar
-router.get("/:id", getUserById);
+// router.get("/:id", getUserById);
 
 router.get("/profile/:id", getDoctorProfile);
 router.put("/profile/:id", updateDoctorProfile);
