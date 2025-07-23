@@ -32,13 +32,14 @@ const BookForm = () => {
   }, [id]);
 
   useEffect(() => {
+    const doctorId = id;
     if (doctor && date) {
       axios
-        .get(`http://localhost:5000/api/appointments/users/booked-slots`, {
-          params: { doctorId: doctor._id, date },
-        })
+        .get(
+          `http://localhost:5000/api/appointments/doctor/booked-slots?doctorId=${doctorId}&date=${date}`
+        )
         .then((res) => setBookedSlots(res.data))
-        .catch((err) => console.log("Error fetching booked slots:", err));
+        .catch((err) => console.error("Error fetching booked slots:", err));
     }
   }, [doctor, date]);
   const timeSlots = [
