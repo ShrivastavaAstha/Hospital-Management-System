@@ -3,7 +3,7 @@ import axios from "axios";
 import "./DoctorProfile.css";
 
 const DoctorProfile = () => {
-  const doctorId = localStorage.getItem("doctorId"); // Replace with real ID from auth/context
+  const doctorId = localStorage.getItem("doctorId");
   console.log("Using doctor ID:", doctorId);
 
   const [doctor, setDoctor] = useState({});
@@ -62,15 +62,6 @@ const DoctorProfile = () => {
     <div className="profile-container">
       <h2>Doctor Profile</h2>
 
-      {/* Profile photo shown in circular shape at top */}
-      {/* {doctor.profilephoto && ( */}
-      {/* <div className="profile-photo-container">
-          <img
-            src={`http://localhost:5000/uploads/${doctor.profilephoto}`}
-            alt="Profile"
-            className="profile-img-circle"
-          />
-        </div> */}
       {doctor.profilephoto && (
         <div className="profile-photo-container">
           <img

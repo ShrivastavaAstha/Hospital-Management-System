@@ -1,0 +1,47 @@
+/* PatientProfile.css */
+.profile-wrapper {
+  max-width: 450px;
+  margin: auto;
+  padding: 20px;
+  border-radius: 10px;
+  background: #f9f9f9;
+  box-shadow: 0 0 8px rgba(0,0,0,0.1);
+}
+
+.profile-wrapper h2 {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.profile-wrapper form {
+  display: flex;
+  flex-direction: column;
+}
+
+.profile-wrapper label {
+  margin-top: 10px;
+  font-weight: 500;
+}
+
+.profile-wrapper input {
+  padding: 8px;
+  margin-top: 4px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.profile-wrapper button {
+  margin-top: 20px;
+  padding: 10px;
+  background-color: #00b894;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.profile-wrapper p {
+  margin-top: 10px;
+  text-align: center;
+  color: green;
+}

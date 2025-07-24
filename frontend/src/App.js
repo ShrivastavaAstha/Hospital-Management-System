@@ -9,13 +9,13 @@ import {
 import Dashboard from "./pages/Dashboard";
 import Home from "./pages/Home";
 import DoctorDashboard from "./pages/DoctorDashboard";
-// import DoctorAppointments from "./pages/DoctorAppointment";
 import DoctorProfile from "./pages/DoctorProfile";
 import PatientDashboard from "./pages/PatientDashboard";
 import Auth from "./pages/Auth";
 import BookAppointment from "./pages/BookAppointment";
 import BookForm from "./pages/BookForm";
 import MyAppointments from "./pages/MyAppointments";
+import PatientProfile from "./pages/PatientProfile";
 
 // Simple protected route
 const PrivateRoute = ({ children }) => {
@@ -46,10 +46,6 @@ function App() {
             </PrivateRoute>
           }
         />
-        {/* <Route
-          path="/doctor-dashboard/appointments"
-          element={<DoctorAppointments />}
-        /> */}
         <Route path="/doctor-dashboardprofile" element={<DoctorProfile />} />
         <Route
           path="/patient-dashboard"
@@ -59,6 +55,7 @@ function App() {
             </PrivateRoute>
           }
         />
+        <Route path="/patient/profile" element={<PatientProfile />} />
         <Route
           path="/book-appointment"
           element={

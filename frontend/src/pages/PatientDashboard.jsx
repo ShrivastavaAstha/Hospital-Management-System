@@ -34,6 +34,12 @@ const PatientDashboard = () => {
               history below.
             </p>
           </div>
+          <button
+            onClick={() => navigate("/patient/profile")}
+            className="profile-button"
+          >
+            My Profile
+          </button>
           <LogoutButton />
         </div>
 
