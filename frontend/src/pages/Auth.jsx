@@ -252,10 +252,17 @@ const Auth = () => {
               />
 
               <input
-                type="text"
+                type="number"
                 name="emergencyContact"
                 value={form.emergencyContact}
-                onChange={handleChange}
+                onChange={(e) => {
+                  const val = e.target.value;
+                  if (/^\d{0,10}$/.test(val)) {
+                    setForm({ ...form, emergencyContact: val });
+                  }
+                }}
+                pattern="\d{10}"
+                title="Phone number must be exactly 10 digits"
                 placeholder="Emergency Contact"
               />
               <input

@@ -6,16 +6,17 @@ import {
   Route,
   Navigate,
 } from "react-router-dom";
-import Dashboard from "./pages/Dashboard";
 import Home from "./pages/Home";
+import Auth from "./pages/Auth";
+import Dashboard from "./pages/Dashboard";
+import PatientDetails from "./pages/PatientDetails";
 import DoctorDashboard from "./pages/DoctorDashboard";
 import DoctorProfile from "./pages/DoctorProfile";
 import PatientDashboard from "./pages/PatientDashboard";
-import Auth from "./pages/Auth";
+import PatientProfile from "./pages/PatientProfile";
 import BookAppointment from "./pages/BookAppointment";
 import BookForm from "./pages/BookForm";
 import MyAppointments from "./pages/MyAppointments";
-import PatientProfile from "./pages/PatientProfile";
 
 // Simple protected route
 const PrivateRoute = ({ children }) => {
@@ -37,6 +38,7 @@ function App() {
             </PrivateRoute>
           }
         />
+        <Route path="/admin/patient/:patientId" element={<PatientDetails />} />
         <Route
           path="/doctor-dashboard"
           element={

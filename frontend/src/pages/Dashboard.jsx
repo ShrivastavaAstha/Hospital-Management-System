@@ -403,6 +403,19 @@ const Dashboard = () => {
                       >
                         Delete
                       </button>
+                      <button
+                        className="action-btn"
+                        style={{
+                          marginLeft: "5px",
+                          backgroundColor: "#4f46e5",
+                          color: "white",
+                        }}
+                        onClick={() =>
+                          navigate(`/admin/patient/${appt.patientId._id}`)
+                        }
+                      >
+                        View
+                      </button>
                     </td>
                   </tr>
                 ))}
