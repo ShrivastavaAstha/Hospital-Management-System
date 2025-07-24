@@ -1,0 +1,40 @@
+.notfound-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 40px 20px;
+  height: 100vh;
+  justify-content: center;
+  background-color: #fefefe;
+}
+
+.animation {
+  width: 300px;
+  max-width: 80%;
+}
+
+.notfound-wrapper h1 {
+  font-size: 2.5rem;
+  color: #333;
+  margin-top: 20px;
+}
+
+.notfound-wrapper p {
+  color: #777;
+  margin: 10px 0 30px;
+}
+
+.home-btn {
+  background-color: #007bff;
+  color: #fff;
+  text-decoration: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-weight: 600;
+  transition: 0.3s;
+}
+
+.home-btn:hover {
+  background-color: #0056b3;
+}

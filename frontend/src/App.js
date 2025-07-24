@@ -17,6 +17,7 @@ import PatientProfile from "./pages/PatientProfile";
 import BookAppointment from "./pages/BookAppointment";
 import BookForm from "./pages/BookForm";
 import MyAppointments from "./pages/MyAppointments";
+import NotFound from "./pages/NotFound";
 
 // Simple protected route
 const PrivateRoute = ({ children }) => {
@@ -82,7 +83,7 @@ function App() {
           }
         />
         <Route path="/doctor/profile" element={<DoctorProfile />} />
-        <Route path="*" element={<Navigate to="/dashboard" />} />
+        <Route path="*" element={<NotFound />} />
       </Routes>
     </Router>
   );
