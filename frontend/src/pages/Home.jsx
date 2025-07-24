@@ -10,6 +10,7 @@ import historyImage from "../assets/landing-history.png";
 import paymentImage from "../assets/landing-payment.png";
 import "./Home.css";
 import { motion } from "framer-motion";
+import { useInstallPrompt } from "../hooks/useInstallPrompt";
 
 const fadeInUp = {
   hidden: { opacity: 0, y: 40 },
@@ -18,6 +19,7 @@ const fadeInUp = {
 
 const Home = () => {
   const navigate = useNavigate();
+  const { isInstallable, promptInstall } = useInstallPrompt();
 
   return (
     <div className="home-container">
@@ -41,6 +43,20 @@ const Home = () => {
             About
           </button>
           <button onClick={() => navigate("/auth")}>Signup</button>
+          {isInstallable && (
+            <button
+              onClick={promptInstall}
+              style={{
+                backgroundColor: "#0a5c80",
+                color: "white",
+                padding: "6px 12px",
+                borderRadius: "6px",
+                marginLeft: "10px",
+              }}
+            >
+              📲 Install App
+            </button>
+          )}
         </div>
       </motion.div>
 

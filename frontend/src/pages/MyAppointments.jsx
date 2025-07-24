@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import "./MyAppointment.css";
 
 const MyAppointments = () => {
   const user = JSON.parse(localStorage.getItem("user"));
   const [appointments, setAppointments] = useState([]);
+  const navigate = useNavigate();
 
   const fetchAppointments = () => {
     axios
@@ -71,6 +73,9 @@ const MyAppointments = () => {
           </div>
         )}
       </div>
+      <button className="back-button" onClick={() => navigate(-1)}>
+        ⬅️
+      </button>
     </div>
   );
 };

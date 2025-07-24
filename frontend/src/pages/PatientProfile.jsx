@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
 const PatientProfile = () => {
+  const navigate = useNavigate();
   const [patient, setPatient] = useState(null);
   const [formData, setFormData] = useState({
     name: "",
@@ -231,6 +233,9 @@ const PatientProfile = () => {
         <button type="submit">Update Profile</button>
         {success && <p>{success}</p>}
       </form>
+      <button className="back-button" onClick={() => navigate(-1)}>
+        ⬅️
+      </button>
     </div>
   );
 };

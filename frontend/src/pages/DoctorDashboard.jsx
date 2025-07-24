@@ -40,6 +40,9 @@ const DoctorDashboard = () => {
         />
         <h1>Welcome, Dr. {doctor.name}</h1>
         <button onClick={() => navigate("/doctor/profile")}>My Profile</button>
+        <button className="back-button" onClick={() => navigate(-1)}>
+          ⬅️
+        </button>
       </header>
 
       <div className="stats-cards">

@@ -187,6 +187,9 @@ const BookForm = () => {
           <button type="submit">✅ Confirm Appointment</button>
         </form>
       </div>
+      <button className="back-button" onClick={() => navigate(-1)}>
+        ⬅️
+      </button>
     </div>
   );
 };

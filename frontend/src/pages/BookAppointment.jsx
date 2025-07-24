@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import "./BookAppointment.css";
 
@@ -15,6 +16,7 @@ const BookAppointment = () => {
   const [doctors, setDoctors] = useState([]);
   const [filteredDoctors, setFilteredDoctors] = useState([]);
   const [selectedSymptom, setSelectedSymptom] = useState("");
+  const navigate = useNavigate();
 
   useEffect(() => {
     axios
@@ -91,6 +93,9 @@ const BookAppointment = () => {
           <p className="no-doctor-msg">No doctors found for this symptom.</p>
         )}
       </div>
+      <button className="back-button" onClick={() => navigate(-1)}>
+        ⬅️
+      </button>
     </div>
   );
 };

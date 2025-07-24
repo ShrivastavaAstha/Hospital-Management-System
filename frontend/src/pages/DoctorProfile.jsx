@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import "./DoctorProfile.css";
 
@@ -12,6 +13,7 @@ const DoctorProfile = () => {
     newPassword: "",
   });
   const [selectedImage, setSelectedImage] = useState(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     axios
@@ -182,6 +184,10 @@ const DoctorProfile = () => {
 
       <button onClick={handlePasswordChange} className="btn-yellow">
         Change Password
+      </button>
+
+      <button className="back-button" onClick={() => navigate(-1)}>
+        ⬅️
       </button>
     </div>
   );
