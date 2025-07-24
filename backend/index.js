@@ -3,7 +3,8 @@ const mongoose = require("mongoose");
 const cors = require("cors");
 const path = require("path");
 
-import { fileURLToPath } from "url";
+const __dirname = __dirname; // Already available in CommonJS
+const __filename = __filename;
 
 require("dotenv").config();
 
@@ -51,8 +52,8 @@ app.get("/", (req, res) => {
 });
 
 // Required if using ES module
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+// const __filename = fileURLToPath(import.meta.url);
+// const __dirname = path.dirname(__filename);
 
 // Serve static files from /public
 app.use(express.static(path.join(__dirname, "public")));
