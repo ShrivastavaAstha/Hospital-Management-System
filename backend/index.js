@@ -2,6 +2,9 @@ const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
 const path = require("path");
+
+import { fileURLToPath } from "url";
+
 require("dotenv").config();
 
 const app = express();
@@ -45,6 +48,18 @@ mongoose
 // Root Route
 app.get("/", (req, res) => {
   res.send("Hospital Management Backend Running");
+});
+
+// Required if using ES module
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+// Serve static files from /public
+app.use(express.static(path.join(__dirname, "public")));
+
+// Serve frontend on all unmatched routes
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "public", "index.html"));
 });
 
 const PORT = process.env.PORT || 5000;
