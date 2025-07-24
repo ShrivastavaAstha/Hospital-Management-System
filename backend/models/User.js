@@ -15,8 +15,26 @@ const userSchema = new mongoose.Schema({
   availability: {
     type: String,
     enum: ["Morning", "Evening", "Both"],
-    default: "Both",
+    default: undefined,
   },
+
+  // Patient-specific fields (optional by default)
+  age: { type: Number },
+  gender: {
+    type: String,
+    enum: ["Male", "Female", "Other"],
+  },
+  address: { type: String },
+  bloodGroup: { type: String },
+  medicalHistory: {
+    type: [String],
+    default: undefined,
+  },
+  allergies: {
+    type: [String],
+    default: undefined,
+  },
+  emergencyContact: { type: String },
 
   createdAt: {
     type: Date,

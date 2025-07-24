@@ -15,6 +15,13 @@ const Auth = () => {
     phone: "",
     availability: "",
     profilePhoto: "",
+    age: "",
+    gender: "",
+    address: "",
+    bloodGroup: "",
+    medicalHistory: "",
+    allergies: "",
+    emergencyContact: "",
   });
   const [error, setError] = useState("");
   const navigate = useNavigate();
@@ -113,7 +120,23 @@ const Auth = () => {
             onChange={handleChange}
             required
           />
-
+          {!isLogin && (
+            <input
+              type="text"
+              name="phone"
+              placeholder="Phone Number"
+              value={form.phone}
+              onChange={(e) => {
+                const val = e.target.value;
+                if (/^\d{0,10}$/.test(val)) {
+                  setForm({ ...form, phone: val });
+                }
+              }}
+              pattern="\d{10}"
+              title="Phone number must be exactly 10 digits"
+              required
+            />
+          )}
           {!isLogin && (
             <select
               name="role"
@@ -127,7 +150,7 @@ const Auth = () => {
             </select>
           )}
 
-          {/* Show doctor-specific fields if role is doctor */}
+          {/* Doctor-specific fields */}
           {!isLogin && form.role === "doctor" && (
             <>
               <select
@@ -149,21 +172,6 @@ const Auth = () => {
                 </option>
               </select>
 
-              <input
-                type="number"
-                name="phone"
-                placeholder="Phone Number"
-                value={form.phone}
-                onChange={(e) => {
-                  const val = e.target.value;
-                  if (/^\d{0,10}$/.test(val)) {
-                    setForm({ ...form, phone: val });
-                  }
-                }}
-                pattern="\d{10}"
-                title="Phone number must be exactly 10 digits"
-                required
-              />
               <select
                 name="availability"
                 value={form.availability}
@@ -175,12 +183,86 @@ const Auth = () => {
                 <option value="Evening">Evening</option>
                 <option value="Both">Both</option>
               </select>
+
               <input
                 type="file"
                 name="profilePhoto"
                 accept="image/*"
                 onChange={handleChange}
                 required
+              />
+            </>
+          )}
+
+          {/* Patient-specific fields */}
+          {!isLogin && form.role === "patient" && (
+            <>
+              <input
+                type="number"
+                name="age"
+                placeholder="Age"
+                value={form.age}
+                onChange={handleChange}
+                required
+              />
+
+              <select
+                name="gender"
+                value={form.gender}
+                onChange={handleChange}
+                required
+              >
+                <option value="">Select Gender</option>
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+                <option value="Other">Other</option>
+              </select>
+
+              <input
+                type="text"
+                name="address"
+                placeholder="Address"
+                value={form.address}
+                onChange={handleChange}
+                required
+              />
+
+              <input
+                type="text"
+                name="bloodGroup"
+                value={form.bloodGroup}
+                onChange={handleChange}
+                placeholder="Blood Group"
+              />
+
+              <input
+                type="text"
+                name="medicalHistory"
+                value={form.medicalHistory}
+                onChange={handleChange}
+                placeholder="Medical History"
+              />
+
+              <input
+                type="text"
+                name="allergies"
+                value={form.allergies}
+                onChange={handleChange}
+                placeholder="Allergies"
+              />
+
+              <input
+                type="text"
+                name="emergencyContact"
+                value={form.emergencyContact}
+                onChange={handleChange}
+                placeholder="Emergency Contact"
+              />
+              <input
+                type="file"
+                name="profilePhoto"
+                accept="image/*"
+                onChange={handleChange}
               />
             </>
           )}
@@ -203,7 +285,6 @@ const Auth = () => {
         </p>
       </div>
 
-      {/* Animated SVG Waves */}
       <svg className="wave" viewBox="0 0 1440 320">
         <path
           fill="#8ec5fc"

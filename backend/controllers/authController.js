@@ -7,31 +7,63 @@ exports.registerUser = async (req, res) => {
     console.log("BODY =>", req.body);
     console.log("FILE =>", req.file);
 
-    const { name, email, password, role, specialization, phone, availability } =
-      req.body;
+    const {
+      name,
+      email,
+      password,
+      role,
+      specialization,
+      phone,
+      availability,
+      age,
+      gender,
+      address,
+      bloodGroup,
+      medicalHistory,
+      allergies,
+      emergencyContact,
+    } = req.body;
 
     const existingUser = await User.findOne({ email });
     if (existingUser)
       return res.status(400).json({ error: "User already exists" });
 
     const hashedPassword = await bcrypt.hash(password, 10);
-
-    // Save profile photo path
     const profilephoto = req.file ? req.file.path : "";
 
-    // Create User
-    const user = new User({
+    // Base user object
+    const userData = {
       name,
       email,
       password: hashedPassword,
       role,
       profilephoto,
-      specialization: role === "doctor" ? specialization : undefined,
-      phone: role === "doctor" ? phone : undefined,
-      availability: role === "doctor" ? availability : undefined,
-    });
+    };
 
+    if (role === "doctor") {
+      userData.specialization = specialization;
+      userData.phone = phone;
+      userData.availability = availability;
+    }
+
+    if (role === "patient") {
+      userData.phone = phone;
+      userData.age = age;
+      userData.gender = gender;
+      userData.address = address;
+      userData.bloodGroup = bloodGroup;
+      userData.medicalHistory =
+        typeof medicalHistory === "string"
+          ? medicalHistory.split(",")
+          : medicalHistory;
+      userData.allergies =
+        typeof allergies === "string" ? allergies.split(",") : allergies;
+      userData.emergencyContact = emergencyContact;
+    }
+
+    const user = new User(userData);
     await user.save();
+
     res.status(201).json({ message: "Registered successfully" });
   } catch (err) {
     console.error(err);
@@ -44,21 +76,20 @@ exports.loginUser = async (req, res) => {
   try {
     const { email, password } = req.body;
 
-    // Step 1: Find the user
     const user = await User.findOne({ email });
     if (!user) return res.status(400).json({ error: "Invalid credentials" });
 
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) return res.status(400).json({ error: "Invalid credentials" });
 
-    // Step 2: Generate token
     const token = jwt.sign(
       { userId: user._id, role: user.role },
       process.env.JWT_SECRET,
       { expiresIn: "1d" }
     );
-    let profile = { ...user._doc }; // Convert Mongoose doc to plain object
-    // Step 4: Return complete user/doctor profile
+
+    const profile = { ...user._doc }; // Convert Mongoose doc to plain object
+
     res.status(200).json({
       token,
       user: {
@@ -70,6 +101,13 @@ exports.loginUser = async (req, res) => {
         phone: profile.phone,
         availability: profile.availability,
         profilephoto: profile.profilephoto,
+        age: profile.age,
+        gender: profile.gender,
+        address: profile.address,
+        bloodGroup: profile.bloodGroup,
+        medicalHistory: profile.medicalHistory,
+        allergies: profile.allergies,
+        emergencyContact: profile.emergencyContact,
       },
     });
   } catch (err) {
