@@ -39,7 +39,7 @@ const Auth = () => {
     e.preventDefault();
     try {
       if (isLogin) {
-        const res = await axios.post("http://localhost:5000/api/auth/login", {
+        const res = await axios.post("/auth/login", {
           email: form.email,
           password: form.password,
         });
@@ -66,7 +66,7 @@ const Auth = () => {
           formData.append(key, form[key]);
         }
 
-        await axios.post("http://localhost:5000/api/auth/register", formData, {
+        await axios.post("/auth/register", formData, {
           headers: {
             "Content-Type": "multipart/form-data",
           },

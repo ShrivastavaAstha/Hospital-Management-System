@@ -21,7 +21,7 @@ const BookForm = () => {
     console.log("Doctor ID:", doctorId);
 
     axios
-      .get(`http://localhost:5000/api/doctors/${doctorId}`)
+      .get(`/doctors/${doctorId}`)
       .then((res) => {
         console.log("Doctor data fetched:", res.data);
         setDoctor(res.data);
@@ -36,7 +36,7 @@ const BookForm = () => {
     if (doctor && date) {
       axios
         .get(
-          `http://localhost:5000/api/appointments/doctor/booked-slots?doctorId=${doctorId}&date=${date}`
+          `/appointments/doctor/booked-slots?doctorId=${doctorId}&date=${date}`
         )
         .then((res) => setBookedSlots(res.data))
         .catch((err) => console.error("Error fetching booked slots:", err));
@@ -65,7 +65,7 @@ const BookForm = () => {
     try {
       // 1. Create Appointment first with Pending status
       const appointmentRes = await axios.post(
-        "http://localhost:5000/api/appointments/book",
+        "/appointments/book",
         {
           doctorId: doctor._id,
           patientId: user._id,
@@ -79,7 +79,7 @@ const BookForm = () => {
 
       // 2. Create Razorpay Order
       const orderRes = await axios.post(
-        "http://localhost:5000/api/payment/create-order",
+        "/payment/create-order",
         {
           amount: 500, // ₹500 in paise
           appointmentId,
@@ -99,7 +99,7 @@ const BookForm = () => {
         handler: async function (response) {
           try {
             // 4. Verify & Update Appointment Status
-            await axios.post("http://localhost:5000/api/payment/verify", {
+            await axios.post("/payment/verify", {
               razorpayPaymentId: response.razorpay_payment_id,
               appointmentId,
             });
@@ -126,7 +126,7 @@ const BookForm = () => {
 
       if (simulate) {
         // Simulate successful payment
-        await axios.post("http://localhost:5000/api/payment/verify", {
+        await axios.post("/payment/verify", {
           razorpayPaymentId: "test_payment_id_123", // dummy ID
           appointmentId, // this should come from appointment booking response
         });

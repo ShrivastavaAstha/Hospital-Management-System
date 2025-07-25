@@ -10,7 +10,7 @@ const DoctorDashboard = () => {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:5000/api/appointments/doctor/${doctor._id}`)
+      .get(`/appointments/doctor/${doctor._id}`)
       .then((res) => setAppointments(res.data))
       .catch((err) => console.error("Error fetching appointments:", err));
   }, [doctor._id]);
@@ -32,7 +32,7 @@ const DoctorDashboard = () => {
         <img
           src={
             doctor.profilephoto
-              ? `http://localhost:5000/uploads/${doctor.profilephoto}`
+              ? `/uploads/${doctor.profilephoto}`
               : "/default.png"
           }
           alt="Doctor Profile"

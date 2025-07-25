@@ -13,7 +13,7 @@ const PatientDashboard = () => {
     const fetchNextAppointment = async () => {
       try {
         const res = await axios.get(
-          `http://localhost:5000/api/appointments/patient/next-appointment/${user._id}`
+          `/appointments/patient/next-appointment/${user._id}`
         );
         setNextAppointment(res.data);
       } catch (err) {

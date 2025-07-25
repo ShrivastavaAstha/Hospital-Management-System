@@ -26,9 +26,7 @@ const PatientProfile = () => {
     if (!userId) return;
     const fetchProfile = async () => {
       try {
-        const res = await axios.get(
-          `http://localhost:5000/api/patients/profile/${userId}`
-        );
+        const res = await axios.get(`/patients/profile/${userId}`);
 
         const data = res.data;
         setPatient(data);
@@ -74,10 +72,7 @@ const PatientProfile = () => {
           .filter(Boolean),
       };
 
-      await axios.put(
-        `http://localhost:5000/api/patients/profile/${userId}`,
-        updatedData
-      );
+      await axios.put(`/patients/profile/${userId}`, updatedData);
       setSuccess("Profile updated successfully!");
     } catch (err) {
       console.error(err);
@@ -90,10 +85,7 @@ const PatientProfile = () => {
     formData.append("profilephoto", selectedImage);
 
     try {
-      await axios.put(
-        `http://localhost:5000/api/patients/profile-picture/${userId}`,
-        formData
-      );
+      await axios.put(`/patients/profile-picture/${userId}`, formData);
       alert("Profile picture updated");
     } catch {
       alert("Image upload failed");

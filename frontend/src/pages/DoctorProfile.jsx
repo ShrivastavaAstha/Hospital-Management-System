@@ -17,7 +17,7 @@ const DoctorProfile = () => {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:5000/api/doctors/profile/${doctorId}`)
+      .get(`/doctors/profile/${doctorId}`)
       .then((res) => {
         console.log("Doctor Data:", res.data);
         setDoctor(res.data);
@@ -31,14 +31,14 @@ const DoctorProfile = () => {
 
   const handleSave = () => {
     axios
-      .put(`http://localhost:5000/api/doctors/profile/${doctorId}`, doctor)
+      .put(`/doctors/profile/${doctorId}`, doctor)
       .then(() => alert("Profile updated successfully"))
       .catch(() => alert("Update failed"));
   };
 
   const handlePasswordChange = () => {
     axios
-      .put(`http://localhost:5000/api/doctors/password/${doctorId}`, passwords)
+      .put(`/doctors/password/${doctorId}`, passwords)
       .then((res) => alert(res.data.message))
       .catch((err) =>
         alert(err.response?.data?.message || "Error updating password")
@@ -50,10 +50,7 @@ const DoctorProfile = () => {
     formData.append("profilephoto", selectedImage);
 
     try {
-      await axios.put(
-        `http://localhost:5000/api/doctors/profile-picture/${doctorId}`,
-        formData
-      );
+      await axios.put(`/doctors/profile-picture/${doctorId}`, formData);
       alert("Profile picture updated");
     } catch {
       alert("Image upload failed");
@@ -71,8 +68,8 @@ const DoctorProfile = () => {
               doctor.profilephotoPreview // show selected image before uploading
                 ? doctor.profilephotoPreview
                 : doctor.profilephoto // show uploaded image
-                ? `http://localhost:5000/uploads/${doctor.profilephoto}`
-                : `http://localhost:5000/uploads/default.png` // fallback
+                ? `/uploads/${doctor.profilephoto}`
+                : `/uploads/default.png` // fallback
             }
             alt="Profile"
             className="profile-img-circle"

@@ -18,6 +18,8 @@ import BookAppointment from "./pages/BookAppointment";
 import BookForm from "./pages/BookForm";
 import MyAppointments from "./pages/MyAppointments";
 import NotFound from "./pages/NotFound";
+import axios from "axios";
+axios.defaults.baseURL = process.env.REACT_APP_API_URL;
 
 // Simple protected route
 const PrivateRoute = ({ children }) => {

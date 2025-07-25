@@ -20,7 +20,7 @@ const BookAppointment = () => {
 
   useEffect(() => {
     axios
-      .get("http://localhost:5000/api/doctors")
+      .get("/doctors")
       .then((res) => {
         setDoctors(res.data);
         setFilteredDoctors(res.data); // initial load
@@ -64,7 +64,7 @@ const BookAppointment = () => {
             {filteredDoctors.map((doc) => (
               <div className="doctor-card" key={doc._id}>
                 <img
-                  src={`http://localhost:5000/uploads/${doc.profilephoto}`}
+                  src={`/uploads/${doc.profilephoto}`}
                   onError={(e) => {
                     e.target.onerror = null;
                     e.target.src =

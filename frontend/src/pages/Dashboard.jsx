@@ -45,19 +45,19 @@ const Dashboard = () => {
 
   useEffect(() => {
     axios
-      .get("http://localhost:5000/api/admin/dashboard", {
+      .get("/admin/dashboard", {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then((res) => setStats(res.data))
       .catch((err) => console.error("Dashboard fetch error:", err));
 
     axios
-      .get("http://localhost:5000/api/doctors")
+      .get("/doctors")
       .then((res) => setDoctors(res.data))
       .catch((err) => console.error("Doctors fetch error:", err));
 
     axios
-      .get("http://localhost:5000/api/admin/appointments", {
+      .get("/admin/appointments", {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then((res) => setAppointments(res.data))
@@ -68,7 +68,7 @@ const Dashboard = () => {
     e.preventDefault();
     try {
       const res = await axios.post(
-        "http://localhost:5000/api/admin/doctors/add",
+        "/admin/doctors/add",
         {
           name,
           specialization,
@@ -97,7 +97,7 @@ const Dashboard = () => {
   const handleDeleteDoctor = async (id) => {
     if (!window.confirm("Delete this doctor?")) return;
     try {
-      await axios.delete(`http://localhost:5000/api/doctors/${id}`);
+      await axios.delete(`/doctors/${id}`);
       setDoctors(doctors.filter((d) => d._id !== id));
     } catch (err) {
       alert("Failed to delete doctor");
@@ -107,7 +107,7 @@ const Dashboard = () => {
   const handleDeleteAppointment = async (id) => {
     if (!window.confirm("Delete this appointment?")) return;
     try {
-      await axios.delete(`http://localhost:5000/api/admin/appointments/${id}`, {
+      await axios.delete(`/admin/appointments/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setAppointments(appointments.filter((a) => a._id !== id));

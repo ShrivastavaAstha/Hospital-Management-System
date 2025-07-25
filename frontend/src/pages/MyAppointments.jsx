@@ -10,7 +10,7 @@ const MyAppointments = () => {
 
   const fetchAppointments = () => {
     axios
-      .get(`http://localhost:5000/api/appointments/patient/${user._id}`)
+      .get(`/appointments/patient/${user._id}`)
       .then((res) => setAppointments(res.data))
       .catch((err) => console.log(err));
   };
@@ -21,7 +21,7 @@ const MyAppointments = () => {
 
   const handleCancel = async (id) => {
     try {
-      await axios.delete(`http://localhost:5000/api/appointments/${id}`);
+      await axios.delete(`/appointments/${id}`);
       fetchAppointments();
     } catch (err) {
       console.error("Cancel error:", err.message);
