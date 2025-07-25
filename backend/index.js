@@ -18,10 +18,6 @@ app.use("/api/patients", patientRoute);
 const doctorRoutes = require("./routes/doctorRoutes");
 app.use("/api/doctors", doctorRoutes);
 
-// app.use("/uploads", express.static("uploads")); // to serve image
-
-// app.use("/api/doctors", doctorRoutes);
-
 const appointmentRoutes = require("./routes/appointmentRoutes");
 app.use("/api/appointments", appointmentRoutes);
 
@@ -49,18 +45,6 @@ mongoose
   .connect(process.env.MONGO_URI)
   .then(() => console.log("✅ MongoDB Connected"))
   .catch((err) => console.log("❌ MongoDB Error:", err));
-
-app.use(express.static("client/build"));
-app.get("*", (req, res) => {
-  res.sendFile(
-    path.resolve(__dirname + "/client/build/index.html"),
-    function (err) {
-      if (err) {
-        console.log(err);
-      }
-    }
-  );
-});
 
 app.listen(PORT, () => {
   console.log(`🚀 Server running on port ${PORT}`);
