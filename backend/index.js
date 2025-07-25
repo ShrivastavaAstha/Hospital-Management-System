@@ -10,24 +10,42 @@ const Message = require("./models/Message.js");
 
 const app = express();
 const server = http.createServer(app); // ⬅️ Create HTTP server (required for Socket.IO)
-const io = new Server(server, {
-  cors: {
-    origin: ["http://localhost:3000", "medcare-nine-alpha.vercel.app"],
+// const io = new Server(server, {
+//   cors: {
+//     origin: ["http://localhost:3000", "medcare-nine-alpha.vercel.app"],
 
-    methods: ["GET", "POST"],
-    credentials: true,
-  },
-});
+//     methods: ["GET", "POST"],
+//     credentials: true,
+//   },
+// });
 
 // Middlewares
 // app.use(cors());
+const allowedOrigins = [
+  "http://localhost:3000",
+  "https://medcare-nine-alpha.vercel.app",
+  "https://hms-frontend-virid.vercel.app",
+];
+
 app.use(
   cors({
-    origin: ["http://localhost:3000", "medcare-nine-alpha.vercel.app"],
-
+    origin: function (origin, callback) {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
     credentials: true,
   })
 );
+const io = new Server(server, {
+  cors: {
+    origin: allowedOrigins,
+    credentials: true,
+    methods: ["GET", "POST"],
+  },
+});
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
