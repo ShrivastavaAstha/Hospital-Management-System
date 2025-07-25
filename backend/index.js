@@ -12,14 +12,21 @@ const app = express();
 const server = http.createServer(app); // ⬅️ Create HTTP server (required for Socket.IO)
 const io = new Server(server, {
   cors: {
-    origin: "http://localhost:5173", // 🔁 your React app's port
+    origin: "http://localhost:3000", // 🔁 your React app's port
     methods: ["GET", "POST"],
     credentials: true,
   },
 });
 
 // Middlewares
-app.use(cors());
+// app.use(cors());
+app.use(
+  cors({
+    origin: "http://localhost:3000",
+    credentials: true,
+  })
+);
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
