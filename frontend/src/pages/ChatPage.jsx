@@ -5,10 +5,10 @@ import axios from "axios";
 import "./ChatPage.css";
 
 // 🔗 Connect to backend server with correct CORS origin allowed
-const socket = io(process.env.REACT_APP_API_URL, {
-  transports: ["polling"],
-  withCredentials: true,
-});
+// const socket = io(process.env.REACT_APP_API_URL, {
+//   transports: ["websocket", "polling"],
+//   withCredentials: true,
+// });
 
 export default function ChatPage() {
   const { userId, doctorId } = useParams(); // ✅ userId instead of currentUserId
@@ -16,6 +16,17 @@ export default function ChatPage() {
   const [chat, setChat] = useState([]);
   const [currentUser, setCurrentUser] = useState(null);
   const [receiver, setReceiver] = useState(null);
+  const [socket, setSocket] = useState(null);
+
+  useEffect(() => {
+    const newSocket = io(process.env.REACT_APP_API_URL, {
+      transports: ["websocket", "polling"],
+      withCredentials: true,
+    });
+    setSocket(newSocket);
+
+    return () => newSocket.disconnect(); // cleanup
+  }, []);
 
   const roomId = [userId, doctorId].sort().join("_");
 

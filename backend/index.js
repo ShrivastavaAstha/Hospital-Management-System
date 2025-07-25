@@ -24,7 +24,7 @@ const server = http.createServer(app); // ⬅️ Create HTTP server (required fo
 const allowedOrigins = [
   "http://localhost:3000",
   "https://medcare-nine-alpha.vercel.app",
-  "https://hms-frontend-virid.vercel.app",
+  "https://medcare-ndkbme5xo-shrivastavaasthas-projects.vercel.app",
 ];
 
 app.use(
