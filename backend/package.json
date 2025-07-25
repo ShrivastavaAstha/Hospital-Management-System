@@ -21,7 +21,8 @@
     "multer": "^2.0.2",
     "path": "^0.12.7",
     "pdfkit": "^0.17.1",
-    "razorpay": "^2.9.6"
+    "razorpay": "^2.9.6",
+    "socket.io": "^4.8.1"
   },
   "devDependencies": {
     "nodemon": "^3.1.10"

@@ -1,0 +1,22 @@
+.chat-container {
+  max-width: 600px;
+  margin: auto;
+  padding: 1rem;
+}
+
+.chat-box {
+  border: 1px solid #ccc;
+  height: 300px;
+  overflow-y: scroll;
+  margin-bottom: 1rem;
+  padding: 1rem;
+}
+
+.sent {
+  text-align: right;
+  color: blue;
+}
+.received {
+  text-align: left;
+  color: green;
+}

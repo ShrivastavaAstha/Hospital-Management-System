@@ -1,44 +1,28 @@
+// socket-enabled-server.js or index.js
+const http = require("http");
+const { Server } = require("socket.io");
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
 const path = require("path");
-
 require("dotenv").config();
+const Message = require("./models/Message.js");
 
 const app = express();
+const server = http.createServer(app); // ⬅️ Create HTTP server (required for Socket.IO)
+const io = new Server(server, {
+  cors: {
+    origin: "http://localhost:5173", // 🔁 your React app's port
+    methods: ["GET", "POST"],
+    credentials: true,
+  },
+});
+
+// Middlewares
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-// app.use("/uploads", express.static("uploads"));
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
-// // Routes
-const patientRoute = require("./routes/patientRoute");
-app.use("/api/patients", patientRoute);
-
-const doctorRoutes = require("./routes/doctorRoutes");
-app.use("/api/doctors", doctorRoutes);
-
-const appointmentRoutes = require("./routes/appointmentRoutes");
-app.use("/api/appointments", appointmentRoutes);
-
-const billingRoutes = require("./routes/billingRoutes");
-app.use("/api/billing", billingRoutes);
-
-const adminRoutes = require("./routes/adminRoutes");
-app.use("/api/admin", adminRoutes);
-
-const authRoutes = require("./routes/authRoutes");
-app.use("/api/auth", authRoutes);
-
-const paymentRoutes = require("./routes/paymentRoutes");
-app.use("/api/payment", paymentRoutes);
-
-// Root Route
-app.get("/", (req, res) => {
-  res.send("Hospital Management Backend Running");
-});
-
-const PORT = process.env.PORT || 5000;
 
 // MongoDB Connect
 mongoose
@@ -46,6 +30,48 @@ mongoose
   .then(() => console.log("✅ MongoDB Connected"))
   .catch((err) => console.log("❌ MongoDB Error:", err));
 
-app.listen(PORT, () => {
+// Routes
+app.use("/api/patients", require("./routes/patientRoute"));
+app.use("/api/doctors", require("./routes/doctorRoutes"));
+app.use("/api/appointments", require("./routes/appointmentRoutes"));
+app.use("/api/billing", require("./routes/billingRoutes"));
+app.use("/api/admin", require("./routes/adminRoutes"));
+app.use("/api/auth", require("./routes/authRoutes"));
+app.use("/api/payment", require("./routes/paymentRoutes"));
+app.use("/api/users", require("./routes/userRoutes"));
+// Root Route
+app.get("/", (req, res) => {
+  res.send("Hospital Management Backend Running");
+});
+
+// ⚡️ Socket.IO Events
+io.on("connection", (socket) => {
+  console.log("🟢 A user connected:", socket.id);
+
+  socket.on("join_room", (room) => {
+    socket.join(room);
+    console.log(`User ${socket.id} joined room: ${room}`);
+  });
+
+  socket.on("send_message", async (data) => {
+    const newMsg = await Message.create({
+      senderId: data.sender,
+      receiverId: data.receiver,
+      message: data.message,
+    });
+    io.to(data.room).emit("receive_message", {
+      ...data,
+      _id: newMsg._id,
+    });
+  });
+
+  socket.on("disconnect", () => {
+    console.log("🔴 A user disconnected:", socket.id);
+  });
+});
+
+// Start server with Socket.IO support
+const PORT = process.env.PORT || 5000;
+server.listen(PORT, () => {
   console.log(`🚀 Server running on port ${PORT}`);
 });

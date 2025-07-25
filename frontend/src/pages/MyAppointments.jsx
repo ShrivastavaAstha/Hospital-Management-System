@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import axios from "axios";
 import "./MyAppointment.css";
 
@@ -67,6 +67,9 @@ const MyAppointments = () => {
                   <button onClick={() => handleCancel(appt._id)}>
                     ❌ Cancel
                   </button>
+                  <Link to={`/chat/${user._id}/${appt.doctorId?._id}`}>
+                    <button>Chat</button>
+                  </Link>
                 </div>
               </div>
             ))}

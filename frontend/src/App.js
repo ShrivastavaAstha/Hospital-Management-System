@@ -17,6 +17,7 @@ import PatientProfile from "./pages/PatientProfile";
 import BookAppointment from "./pages/BookAppointment";
 import BookForm from "./pages/BookForm";
 import MyAppointments from "./pages/MyAppointments";
+import ChatPage from "./pages/ChatPage";
 import NotFound from "./pages/NotFound";
 import axios from "axios";
 axios.defaults.baseURL = process.env.REACT_APP_API_URL;
@@ -85,6 +86,8 @@ function App() {
           }
         />
         <Route path="/doctor/profile" element={<DoctorProfile />} />
+        <Route path="/chat/:userId/:doctorId" element={<ChatPage />} />
+
         <Route path="*" element={<NotFound />} />
       </Routes>
     </Router>
