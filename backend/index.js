@@ -14,8 +14,10 @@ const io = new Server(server, {
   cors: {
     origin: [
       "http://localhost:3000",
-      "https://hms-frontend-virid.vercel.app",
-      "https://hms-frontend-5kvzufrh9-shrivastavaasthas-projects.vercel.app",
+      "hms-frontend-git-master-shrivastavaasthas-projects.vercel.app",
+      "hms-frontend-anouii32b-shrivastavaasthas-projects.vercel.app",
+      // "https://hms-frontend-virid.vercel.app",
+      // "https://hms-frontend-5kvzufrh9-shrivastavaasthas-projects.vercel.app",
     ],
 
     methods: ["GET", "POST"],
@@ -29,8 +31,8 @@ app.use(
   cors({
     origin: [
       "http://localhost:3000",
-      "https://hms-frontend-virid.vercel.app",
-      "https://hms-frontend-5kvzufrh9-shrivastavaasthas-projects.vercel.app",
+      "hms-frontend-git-master-shrivastavaasthas-projects.vercel.app",
+      "hms-frontend-anouii32b-shrivastavaasthas-projects.vercel.app",
     ],
 
     credentials: true,

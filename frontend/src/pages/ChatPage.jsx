@@ -5,7 +5,10 @@ import axios from "axios";
 import "./ChatPage.css";
 
 // 🔗 Connect to backend server with correct CORS origin allowed
-const socket = io(process.env.REACT_APP_API_URL);
+const socket = io(process.env.REACT_APP_API_URL, {
+  transports: ["polling"],
+  withCredentials: true,
+});
 
 export default function ChatPage() {
   const { userId, doctorId } = useParams(); // ✅ userId instead of currentUserId
