@@ -12,12 +12,7 @@ const app = express();
 const server = http.createServer(app); // ⬅️ Create HTTP server (required for Socket.IO)
 const io = new Server(server, {
   cors: {
-    origin: [
-      "http://localhost:3000",
-      "hms-frontend-virid.vercel.app",
-      // "https://hms-frontend-virid.vercel.app",
-      // "https://hms-frontend-5kvzufrh9-shrivastavaasthas-projects.vercel.app",
-    ],
+    origin: ["http://localhost:3000", "medcare-nine-alpha.vercel.app"],
 
     methods: ["GET", "POST"],
     credentials: true,
@@ -28,7 +23,7 @@ const io = new Server(server, {
 // app.use(cors());
 app.use(
   cors({
-    origin: ["http://localhost:3000", "hms-frontend-virid.vercel.app"],
+    origin: ["http://localhost:3000", "medcare-nine-alpha.vercel.app"],
 
     credentials: true,
   })
