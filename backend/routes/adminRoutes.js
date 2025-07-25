@@ -23,7 +23,8 @@ router.delete("/bills/:id", verifyToken, isAdmin, deleteBill);
 // 🔐 Protect this route:
 router.get("/dashboard", verifyToken, isAdmin, getDashboardStats);
 // doctorRoutes.js
-router.delete("/:id", deleteDoctor); // DELETE doctor
+// router.delete("/:id", deleteDoctor); // DELETE doctor
+router.delete("/doctors/:id", verifyToken, isAdmin, deleteDoctor); // ✅ Safe & specific
 
 // appointmentRoutes.js
 // router.delete("/:id", deleteAppointment); // DELETE appointment
