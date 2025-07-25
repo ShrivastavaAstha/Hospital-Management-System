@@ -22,8 +22,8 @@ app.use("/api/doctors", doctorRoutes);
 
 // app.use("/api/doctors", doctorRoutes);
 
-// const appointmentRoutes = require("./routes/appointmentRoutes");
-// app.use("/api/appointments", appointmentRoutes);
+const appointmentRoutes = require("./routes/appointmentRoutes");
+app.use("/api/appointments", appointmentRoutes);
 
 // const billingRoutes = require("./routes/billingRoutes");
 // app.use("/api/billing", billingRoutes);
