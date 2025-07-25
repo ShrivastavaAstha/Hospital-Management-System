@@ -3,9 +3,6 @@ const mongoose = require("mongoose");
 const cors = require("cors");
 const path = require("path");
 
-const __dirname = __dirname; // Already available in CommonJS
-const __filename = __filename;
-
 require("dotenv").config();
 
 const app = express();
@@ -40,30 +37,31 @@ app.use("/api/auth", authRoutes);
 const paymentRoutes = require("./routes/paymentRoutes");
 app.use("/api/payment", paymentRoutes);
 
+// Root Route
+app.get("/", (req, res) => {
+  res.send("Hospital Management Backend Running");
+});
+
+const PORT = process.env.PORT || 5000;
+
 // MongoDB Connect
 mongoose
   .connect(process.env.MONGO_URI)
   .then(() => console.log("✅ MongoDB Connected"))
   .catch((err) => console.log("❌ MongoDB Error:", err));
 
-// Root Route
-app.get("/", (req, res) => {
-  res.send("Hospital Management Backend Running");
-});
-
-// Required if using ES module
-// const __filename = fileURLToPath(import.meta.url);
-// const __dirname = path.dirname(__filename);
-
-// Serve static files from /public
-app.use(express.static(path.join(__dirname, "public")));
-
-// Serve frontend on all unmatched routes
+app.use(express.static("client/build"));
 app.get("*", (req, res) => {
-  res.sendFile(path.join(__dirname, "public", "index.html"));
+  res.sendFile(
+    path.resolve(__dirname + "/client/build/index.html"),
+    function (err) {
+      if (err) {
+        console.log(err);
+      }
+    }
+  );
 });
 
-const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(`🚀 Server running on port ${PORT}`);
 });
