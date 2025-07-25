@@ -25,17 +25,17 @@ app.use("/api/doctors", doctorRoutes);
 const appointmentRoutes = require("./routes/appointmentRoutes");
 app.use("/api/appointments", appointmentRoutes);
 
-// const billingRoutes = require("./routes/billingRoutes");
-// app.use("/api/billing", billingRoutes);
+const billingRoutes = require("./routes/billingRoutes");
+app.use("/api/billing", billingRoutes);
 
-// const adminRoutes = require("./routes/adminRoutes");
-// app.use("/api/admin", adminRoutes);
+const adminRoutes = require("./routes/adminRoutes");
+app.use("/api/admin", adminRoutes);
 
-// const authRoutes = require("./routes/authRoutes");
-// app.use("/api/auth", authRoutes);
+const authRoutes = require("./routes/authRoutes");
+app.use("/api/auth", authRoutes);
 
-// const paymentRoutes = require("./routes/paymentRoutes");
-// app.use("/api/payment", paymentRoutes);
+const paymentRoutes = require("./routes/paymentRoutes");
+app.use("/api/payment", paymentRoutes);
 
 // Root Route
 app.get("/", (req, res) => {
