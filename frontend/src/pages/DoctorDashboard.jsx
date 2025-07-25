@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import "./DoctorDashboard.css";
 
 const DoctorDashboard = () => {
@@ -84,6 +84,11 @@ const DoctorDashboard = () => {
                     <td>{appt.appointmentTime}</td>
                     <td>{appt.status || "Scheduled"}</td>
                     <td>{appt.paymentStatus || "N/A"}</td>
+                    <td>
+                      <Link to={`/chat/${doctor._id}/${appt.patientId?._id}`}>
+                        <button>Chat</button>
+                      </Link>
+                    </td>
                   </tr>
                 ))}
               </tbody>

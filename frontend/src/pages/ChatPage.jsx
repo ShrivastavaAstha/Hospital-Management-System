@@ -51,9 +51,16 @@ export default function ChatPage() {
 
   const sendMessage = () => {
     if (!message.trim()) return;
+    // const newMsg = {
+    //   sender: userId,
+    //   receiver: doctorId,
+    //   message,
+    //   room: roomId,
+    //   time: new Date().toLocaleTimeString(),
+    // };
     const newMsg = {
-      sender: userId,
-      receiver: doctorId,
+      sender: currentUser._id,
+      receiver: receiver._id,
       message,
       room: roomId,
       time: new Date().toLocaleTimeString(),
@@ -64,13 +71,18 @@ export default function ChatPage() {
   };
 
   if (!currentUser || !receiver) return <p>Loading chat...</p>;
-
+  {
+    /* <p key={i} className={msg.sender === userId ? "sent" : "received"}> */
+  }
   return (
     <div className="chat-container">
       <h2>Chat with {receiver.name}</h2>
       <div className="chat-box">
         {chat.map((msg, i) => (
-          <p key={i} className={msg.sender === userId ? "sent" : "received"}>
+          <p
+            key={i}
+            className={msg.sender === currentUser._id ? "sent" : "received"}
+          >
             <span>{msg.message}</span>
             <small>{msg.time}</small>
           </p>
