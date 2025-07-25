@@ -95,6 +95,13 @@ io.on("connection", (socket) => {
   socket.on("disconnect", () => {
     console.log("🔴 A user disconnected:", socket.id);
   });
+  socket.on("typing", ({ room }) => {
+    socket.to(room).emit("typing");
+  });
+
+  socket.on("stop_typing", ({ room }) => {
+    socket.to(room).emit("stop_typing");
+  });
 });
 
 // Start server with Socket.IO support

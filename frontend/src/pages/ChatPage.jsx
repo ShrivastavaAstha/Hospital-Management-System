@@ -14,6 +14,9 @@ export default function ChatPage() {
   const { userId, doctorId } = useParams(); // ✅ userId instead of currentUserId
   const [message, setMessage] = useState("");
   const [chat, setChat] = useState([]);
+  const [typing, setTyping] = useState(false);
+  let typingTimeout;
+
   const [currentUser, setCurrentUser] = useState(null);
   const [receiver, setReceiver] = useState(null);
   const [socket, setSocket] = useState(null);
@@ -57,9 +60,17 @@ export default function ChatPage() {
     socket.on("receive_message", (data) => {
       setChat((prev) => [...prev, data]);
     });
+    socket.on("typing", () => {
+      setTyping(true);
+    });
+    socket.on("stop_typing", () => {
+      setTyping(false);
+    });
 
     return () => {
       socket.off("receive_message");
+      socket.off("typing");
+      socket.off("stop_typing");
     };
   }, [roomId, currentUser, receiver]);
 
@@ -91,6 +102,7 @@ export default function ChatPage() {
   return (
     <div className="chat-container">
       <h2>Chat with {receiver.name}</h2>
+      {typing && <p className="typing-indicator">Typing...</p>}
       <div className="chat-box">
         {chat.map((msg, i) => (
           <p
@@ -105,7 +117,18 @@ export default function ChatPage() {
       <input
         type="text"
         value={message}
-        onChange={(e) => setMessage(e.target.value)}
+        onChange={(e) => {
+          setMessage(e.target.value);
+
+          // Emit typing
+          socket.emit("typing", { room: roomId });
+
+          // Prevent continuous firing
+          if (typingTimeout) clearTimeout(typingTimeout);
+          typingTimeout = setTimeout(() => {
+            socket.emit("stop_typing", { room: roomId });
+          }, 1000);
+        }}
         placeholder="Type message..."
       />
       <button onClick={sendMessage}>Send</button>

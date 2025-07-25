@@ -20,3 +20,8 @@
   text-align: left;
   color: green;
 }
+.typing-indicator {
+  font-style: italic;
+  color: gray;
+  margin-bottom: 10px;
+}
