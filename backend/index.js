@@ -12,8 +12,8 @@ app.use(express.urlencoded({ extended: true }));
 // app.use("/uploads", express.static("uploads"));
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 // // Routes
-// const patientRoute = require("./routes/patientRoute");
-// app.use("/api/patients", patientRoute);
+const patientRoute = require("./routes/patientRoute");
+app.use("/api/patients", patientRoute);
 
 // const doctorRoutes = require("./routes/doctorRoutes");
 // app.use("/api/doctors", doctorRoutes);
