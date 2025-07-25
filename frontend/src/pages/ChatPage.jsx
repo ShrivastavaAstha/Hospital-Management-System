@@ -19,7 +19,7 @@ export default function ChatPage() {
   const [socket, setSocket] = useState(null);
 
   useEffect(() => {
-    const newSocket = io(process.env.REACT_APP_API_URL, {
+    const newSocket = io(process.env.REACT_APP_SOCKET_URL, {
       transports: ["websocket", "polling"],
       withCredentials: true,
     });
