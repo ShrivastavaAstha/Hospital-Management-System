@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import io from "socket.io-client";
 import axios from "axios";
 import "./ChatPage.css";
@@ -14,6 +15,7 @@ export default function ChatPage() {
   const [currentUser, setCurrentUser] = useState(null);
   const [receiver, setReceiver] = useState(null);
   const [socket, setSocket] = useState(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const newSocket = io(process.env.REACT_APP_SOCKET_URL, {
@@ -157,50 +159,55 @@ export default function ChatPage() {
     /* <p key={i} className={msg.sender === userId ? "sent" : "received"}> */
   }
   return (
-    <div className="chat-container">
-      <h2>Chat with {receiver.name}</h2>
-      {typing && <p className="typing-indicator">Typing...</p>}
-      <div className="chat-box">
-        {chat.map((msg, i) => (
-          <p
-            key={i}
-            className={msg.sender === currentUser._id ? "sent" : "received"}
-          >
-            <span>{msg.message}</span>
-            <small>
-              {msg.time}
-              {msg.sender === currentUser._id && (
-                <>
-                  {" "}
-                  · {msg.status === "sent" && "✓"}
-                  {msg.status === "delivered" && "✓✓"}
-                  {msg.status === "seen" && (
-                    <span style={{ color: "red" }}>✓✓</span>
-                  )}
-                </>
-              )}
-            </small>
-          </p>
-        ))}
+    <div>
+      <div className="chat-container">
+        <h2>You are Chatting with {receiver.name}</h2>
+        {typing && <p className="typing-indicator">Typing...</p>}
+        <div className="chat-box">
+          {chat.map((msg, i) => (
+            <p
+              key={i}
+              className={msg.sender === currentUser._id ? "sent" : "received"}
+            >
+              <span>{msg.message}</span>
+              <small>
+                {msg.time}
+                {msg.sender === currentUser._id && (
+                  <>
+                    {" "}
+                    · {msg.status === "sent" && "✓"}
+                    {msg.status === "delivered" && "✓✓"}
+                    {msg.status === "seen" && (
+                      <span style={{ color: "blue" }}>✓✓</span>
+                    )}
+                  </>
+                )}
+              </small>
+            </p>
+          ))}
+        </div>
+        <input
+          type="text"
+          value={message}
+          onChange={(e) => {
+            setMessage(e.target.value);
+
+            // Emit typing
+            socket.emit("typing", { room: roomId });
+
+            // Prevent continuous firing
+            if (typingTimeout) clearTimeout(typingTimeout);
+            typingTimeout = setTimeout(() => {
+              socket.emit("stop_typing", { room: roomId });
+            }, 1000);
+          }}
+          placeholder="Type message..."
+        />
+        <button onClick={sendMessage}>Send</button>
       </div>
-      <input
-        type="text"
-        value={message}
-        onChange={(e) => {
-          setMessage(e.target.value);
-
-          // Emit typing
-          socket.emit("typing", { room: roomId });
-
-          // Prevent continuous firing
-          if (typingTimeout) clearTimeout(typingTimeout);
-          typingTimeout = setTimeout(() => {
-            socket.emit("stop_typing", { room: roomId });
-          }, 1000);
-        }}
-        placeholder="Type message..."
-      />
-      <button onClick={sendMessage}>Send</button>
+      <button className="back-button" onClick={() => navigate(-1)}>
+        ⬅️
+      </button>
     </div>
   );
 }

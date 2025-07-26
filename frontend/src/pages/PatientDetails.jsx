@@ -53,6 +53,10 @@ const PatientDetails = () => {
               <strong>Address:</strong> {patient.address || "N/A"}
             </div>
             <div>
+              <strong>Contact.no: </strong>
+              {patient.phone || "N/A"}
+            </div>
+            <div>
               <strong>Emergency Contact:</strong>{" "}
               {patient.emergencyContact || "N/A"}
             </div>
