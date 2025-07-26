@@ -166,7 +166,7 @@ export default function ChatPage() {
 
     const choice = window.confirm(
       isSender
-        ? "Delete for everyone?\nClick 'OK' for Delete for Everyone\nClick 'Cancel' for Delete for Me"
+        ? "Delete for everyone?\nClick 'OK' for Delete for Everyone"
         : "Do you want to delete this message for yourself?"
     );
 
@@ -177,7 +177,9 @@ export default function ChatPage() {
         setChat((prev) => prev.filter((m) => m._id !== msg._id));
       } else {
         // ✅ Delete for Me
-        await axios.put(`/messages/delete-for-me/${msg._id}`);
+        await axios.put(`/messages/delete-for-me/${msg._id}`, {
+          userId: currentUser._id,
+        });
         setChat((prev) => prev.filter((m) => m._id !== msg._id));
       }
     } catch (err) {
