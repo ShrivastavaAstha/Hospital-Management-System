@@ -173,13 +173,13 @@ export default function ChatPage() {
     try {
       if (choice && isSender) {
         // ✅ Delete for Everyone
-        await axios.delete(
+        await axios.put(
           `/messages/${msg._id}?userId=${currentUser._id}&deleteFor=everyone`
         );
         setChat((prev) => prev.filter((m) => m._id !== msg._id));
       } else {
         // ✅ Delete for Me
-        await axios.delete(
+        await axios.put(
           `/messages/${msg._id}?userId=${currentUser._id}&deleteFor=me`
         );
         setChat((prev) => prev.filter((m) => m._id !== msg._id));
