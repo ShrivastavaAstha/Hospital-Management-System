@@ -15,10 +15,17 @@ body {
 
 /* Sidebar */
 .sidebar {
-  width: 220px;
-  background: #2e3a59;
-  color: #fff;
-  padding: 30px 20px;
+  width: 250px;
+  height: 100vh;
+  background-color: #2e3a59;
+  color: white;
+  padding: 20px;
+  position: fixed;         /* 👈 makes it fixed */
+  left: 0;
+  top: 0;
+  bottom: 0;
+  overflow-y: auto;
+  z-index: 100;
 }
 
 .sidebar h2 {
@@ -166,4 +173,49 @@ tbody tr:hover {
   padding: 6px 12px;
   border-radius: 4px;
   cursor: pointer;
+}
+/* Hamburger menu (mobile only) */
+.hamburger {
+  display: none;
+  font-size: 2rem;
+  padding: 10px 20px;
+  background: #2e3a59;
+  color: white;
+  cursor: pointer;
+}
+
+@media (max-width: 768px) {
+  .hamburger {
+    display: block;
+    position: sticky;
+    top: 0;
+    z-index: 999;
+  }
+
+  .sidebar {
+    position: fixed;
+    top: 50px;
+    left: -100%;
+    width: 70%;
+    max-width: 280px;
+    height: 100vh;
+    background-color: #2e3a59;
+    color: white;
+    padding: 20px;
+    transition: left 0.3s ease-in-out;
+    z-index: 998;
+  }
+
+  .sidebar.open {
+    left: 0;
+  }
+
+  .main {
+    padding: 20px;
+    margin-left: 0 !important;
+  }
+
+  .dashboard-wrapper {
+    flex-direction: column;
+  }
 }

@@ -3,33 +3,38 @@
   background: linear-gradient(to right, #fef9f9, #eaf6ff);
   display: flex;
   justify-content: center;
-  align-items: center;
   padding: 40px 20px;
   font-family: "Segoe UI", sans-serif;
 }
 
 .appointment-card {
   width: 100%;
-  max-width: 900px;
-  background: white;
-  padding: 40px;
+  max-width: 1100px;
+  background: #ffffffcc;
+  backdrop-filter: blur(6px);
+  padding: 40px 30px;
   border-radius: 20px;
   box-shadow: 0 12px 24px rgba(0, 0, 0, 0.08);
   animation: fadeIn 0.6s ease-in-out;
-}
-
-.appointment-card h2 {
-  text-align: center;
-  font-size: 28px;
-  margin-bottom: 30px;
-  color: #333;
-}
-
-.symptom-select {
   display: flex;
   flex-direction: column;
   align-items: center;
+}
+
+.appointment-card h2 {
+  font-size: 28px;
   margin-bottom: 30px;
+  color: #222;
+  text-align: center;
+}
+
+.symptom-select {
+  width: 100%;
+  max-width: 400px;
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 30px;
+  align-self: center;
 }
 
 .symptom-select label {
@@ -42,14 +47,21 @@
   padding: 10px 16px;
   border-radius: 8px;
   border: 1px solid #ccc;
-  width: 250px;
+  width: 100%;
   font-size: 15px;
+  transition: border-color 0.3s ease;
+}
+
+.symptom-select select:focus {
+  outline: none;
+  border-color: #60a5fa;
 }
 
 .doctor-grid {
+  width: 100%;
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-  gap: 20px;
+  gap: 25px;
   margin-top: 20px;
 }
 
@@ -77,7 +89,17 @@
 .doctor-card p {
   font-size: 14px;
   color: #555;
-  margin-bottom: 12px;
+  margin-bottom: 10px;
+  line-height: 1.5;
+}
+
+.doctor-img {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 50%;
+  margin-bottom: 10px;
+  border: 3px solid #cfe8ff;
 }
 
 .doctor-card button {
@@ -89,10 +111,12 @@
   font-weight: bold;
   cursor: pointer;
   transition: 0.3s ease;
+  font-size: 14px;
 }
 
 .doctor-card button:hover {
   background-color: #1d4ed8;
+  transform: translateY(-2px);
 }
 
 .no-doctor-msg {
@@ -100,6 +124,27 @@
   color: #777;
   font-size: 15px;
   margin-top: 20px;
+}
+
+.back-button {
+  position: fixed;
+  bottom: 30px;
+  left: 30px;
+  background: #f3f4f6;
+  border: 1px solid #d1d5db;
+  padding: 10px 18px;
+  border-radius: 10px;
+  font-size: 14px;
+  color: #333;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  z-index: 999;
+}
+
+.back-button:hover {
+  background: #e2e8f0;
+  transform: scale(1.05);
 }
 
 @keyframes fadeIn {
@@ -112,19 +157,24 @@
     opacity: 1;
   }
 }
-.doctor-card {
-  border: 1px solid #ddd;
-  padding: 16px;
-  border-radius: 12px;
-  text-align: center;
-  background: #fff;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-}
 
-.doctor-img {
-  width: 100px;
-  height: 100px;
-  object-fit: cover;
-  border-radius: 50%;
-  margin-bottom: 10px;
+@media (max-width: 600px) {
+  .appointment-card {
+    padding: 30px 20px;
+  }
+
+  .symptom-select {
+    width: 100%;
+  }
+
+  .symptom-select select {
+    width: 100%;
+  }
+
+  .back-button {
+    left: 15px;
+    bottom: 15px;
+    padding: 8px 14px;
+    font-size: 13px;
+  }
 }

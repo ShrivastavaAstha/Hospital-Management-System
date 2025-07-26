@@ -230,3 +230,98 @@ button:hover {
     gap: 10px;
   }
 }
+
+/* Add this inside your existing CSS */
+
+.hamburger {
+  display: none;
+  font-size: 28px;
+  cursor: pointer;
+}
+
+@media (max-width: 768px) {
+  .nav-links {
+    display: none;
+    position: absolute;
+    top: 70px;
+    right: 20px;
+    background: white;
+    flex-direction: column;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.1);
+    z-index: 1001;
+    transition: all 0.3s ease;
+  }
+
+  .nav-links.open {
+    display: flex;
+  }
+
+  .hamburger {
+    display: block;
+  }
+}
+
+/* Hide nav-links on mobile */
+.desktop-only {
+  display: flex;
+}
+
+.menu-icon {
+  display: none;
+  font-size: 28px;
+  cursor: pointer;
+  z-index: 1101;
+}
+
+.side-drawer {
+  position: fixed;
+  top: 0;
+  right: -300px;
+  width: 250px;
+  height: 100vh;
+  background: white;
+  box-shadow: -2px 0 10px rgba(0, 0, 0, 0.1);
+  padding: 60px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  z-index: 1100;
+  transition: right 0.3s ease;
+}
+
+.side-drawer button {
+  background: transparent;
+  border: 2px solid #0077ff;
+  color: #0077ff;
+  padding: 10px 14px;
+  border-radius: 6px;
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.side-drawer.open {
+  right: 0;
+}
+
+/* Mobile Styles */
+@media (max-width: 768px) {
+  .desktop-only {
+    display: none;
+  }
+
+  .menu-icon {
+    display: block;
+  }
+}
+.backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  backdrop-filter: blur(4px);
+  background: rgba(0, 0, 0, 0.2);
+  z-index: 1099;
+}

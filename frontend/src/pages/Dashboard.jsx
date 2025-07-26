@@ -39,6 +39,9 @@ const Dashboard = () => {
   const [filterPatient, setFilterPatient] = useState("");
   const [filterDate, setFilterDate] = useState("");
   const [filterTime, setFilterTime] = useState("");
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+
+  const toggleSidebar = () => setSidebarOpen((prev) => !prev);
 
   const token = localStorage.getItem("token");
   const navigate = useNavigate();
@@ -130,29 +133,22 @@ const Dashboard = () => {
 
   return (
     <div className="dashboard-wrapper">
-      {/* Sidebar */}
-      <div className="sidebar">
-        <h2>Admin Dashboard</h2>
-        {/* <a href="/dashboard">Dashboard</a> */}
-        <button
-          onClick={scrollToDoctors}
-          className="sidebar-link"
-          style={{ backgroundColor: "transparent" }}
-        >
-          Doctors
-        </button>
-        <button
-          onClick={scrollToAppointments}
-          className="sidebar-link"
-          style={{ backgroundColor: "transparent" }}
-        >
-          Appointments
-        </button>
+      {/* Hamburger Menu for Mobile */}
+      <div className="hamburger" onClick={toggleSidebar}>
+        ☰
+      </div>
 
-        <button onClick={handleLogout} style={{ marginTop: "40px" }}>
+      {/* Sidebar */}
+      <aside className={`sidebar ${sidebarOpen ? "open" : ""}`}>
+        <h2>Admin Dashboard</h2>
+        <button onClick={scrollToAppointments}>Appointments</button>
+        <br />
+        <button onClick={scrollToDoctors}>Doctors</button>
+        <br />
+        <button onClick={handleLogout} style={{ backgroundColor: "red" }}>
           Logout
         </button>
-      </div>
+      </aside>
 
       {/* Main Content */}
       <div className="main">

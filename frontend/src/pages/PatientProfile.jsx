@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { toast } from "react-toastify";
+import "./PatientProfile.css";
 
 const PatientProfile = () => {
   const navigate = useNavigate();
@@ -73,7 +75,9 @@ const PatientProfile = () => {
       };
 
       await axios.put(`/patients/profile/${userId}`, updatedData);
-      setSuccess("Profile updated successfully!");
+      // setSuccess("Profile updated successfully!");
+      toast.success("Profile updated successfully!");
+      setSuccess("");
     } catch (err) {
       console.error(err);
       setSuccess("Error updating profile.");
@@ -86,9 +90,11 @@ const PatientProfile = () => {
 
     try {
       await axios.put(`/patients/profile-picture/${userId}`, formData);
-      alert("Profile picture updated");
+      // alert("Profile picture updated");
+      toast.success("Profile picture updated");
     } catch {
-      alert("Image upload failed");
+      // alert("Image upload failed");
+      toast.error("Image upload failed");
     }
   };
 
@@ -191,12 +197,22 @@ const PatientProfile = () => {
         />
 
         <label>Blood Group</label>
-        <input
-          type="text"
+        <select
           name="bloodGroup"
           value={formData.bloodGroup}
           onChange={handleChange}
-        />
+          required
+        >
+          <option value="">-- Select Blood Group --</option>
+          <option value="A+">A+</option>
+          <option value="A-">A-</option>
+          <option value="B+">B+</option>
+          <option value="B-">B-</option>
+          <option value="AB+">AB+</option>
+          <option value="AB-">AB-</option>
+          <option value="O+">O+</option>
+          <option value="O-">O-</option>
+        </select>
 
         <label>Medical History </label>
         <input

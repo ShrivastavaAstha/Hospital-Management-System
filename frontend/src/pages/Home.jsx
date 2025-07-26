@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import doctorImage from "../assets/landing-doctor.png";
 import doctorsgrpImage from "../assets/landing-doctorsgrp.png";
@@ -20,6 +20,14 @@ const fadeInUp = {
 const Home = () => {
   const navigate = useNavigate();
   const { isInstallable, promptInstall } = useInstallPrompt();
+  const [menuOpen, setMenuOpen] = useState(false);
+
+  const handleNavClick = (scrollTo = null) => {
+    if (scrollTo) {
+      window.scrollTo({ top: scrollTo, behavior: "smooth" });
+    }
+    setMenuOpen(false);
+  };
 
   return (
     <div className="home-container">
@@ -31,27 +39,43 @@ const Home = () => {
         transition={{ duration: 1 }}
       >
         <h1 className="logo">💙 MedCare</h1>
-        <div className="nav-links">
-          <button
-            onClick={() => window.scrollTo({ top: 700, behavior: "smooth" })}
-          >
-            Features
-          </button>
-          <button
-            onClick={() => window.scrollTo({ top: 1400, behavior: "smooth" })}
-          >
-            About
-          </button>
+
+        {/* Hamburger or Close Icon */}
+        <div className="menu-icon" onClick={() => setMenuOpen(!menuOpen)}>
+          {menuOpen ? "✕" : "☰"}
+        </div>
+
+        {/* Desktop Links */}
+        <div className="nav-links desktop-only">
+          <button onClick={() => handleNavClick(700)}>Features</button>
+          <button onClick={() => handleNavClick(1400)}>About</button>
           <button onClick={() => navigate("/auth")}>Signup</button>
           {isInstallable && (
+            <button onClick={promptInstall}>📲 Install App</button>
+          )}
+        </div>
+
+        {/* Mobile Side Drawer with Backdrop */}
+        {menuOpen && (
+          <div className="backdrop" onClick={() => setMenuOpen(false)}></div>
+        )}
+
+        <div className={`side-drawer ${menuOpen ? "open" : ""}`}>
+          <button onClick={() => handleNavClick(700)}>Features</button>
+          <button onClick={() => handleNavClick(1400)}>About</button>
+          <button
+            onClick={() => {
+              navigate("/auth");
+              setMenuOpen(false);
+            }}
+          >
+            Signup
+          </button>
+          {isInstallable && (
             <button
-              onClick={promptInstall}
-              style={{
-                backgroundColor: "#0a5c80",
-                color: "white",
-                padding: "6px 12px",
-                borderRadius: "6px",
-                marginLeft: "10px",
+              onClick={() => {
+                promptInstall();
+                setMenuOpen(false);
               }}
             >
               📲 Install App

@@ -1,88 +1,180 @@
-/* PatientProfile.css */
-.profile-wrapper {
-  max-width: 700px;
-  margin: 2rem auto;
-  padding: 2rem;
-  background-color: #fefefe;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  border-radius: 15px;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+/* Global Styles */
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Poppins', sans-serif;
+  background: linear-gradient(to right, #dbeafe, #e0f2fe);
 }
 
+/* Container */
+.profile-wrapper {
+  max-width: 900px;
+  margin: 3rem auto;
+  padding: 3rem 2rem;
+  border-radius: 30px;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.1);
+  animation: fadeIn 0.6s ease-out;
+  transition: all 0.3s ease;
+}
+
+/* Title */
 .profile-wrapper h2 {
   text-align: center;
-  color: #34495e;
+  font-size: 2.4rem;
+  color: #1d4ed8;
+  margin-bottom: 2.5rem;
+  font-weight: 700;
+}
+
+/* Profile Image */
+.profile-photo-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
   margin-bottom: 2rem;
 }
 
-.profile-photo-container {
-  text-align: center;
-  margin-bottom: 1rem;
-}
-
 .profile-img-circle {
-  width: 120px;
-  height: 120px;
-  object-fit: cover;
+  width: 130px;
+  height: 130px;
   border-radius: 50%;
-  border: 3px solid #3498db;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
+  border: 4px solid #3b82f6;
+  object-fit: cover;
+  box-shadow: 0 4px 25px rgba(59, 130, 246, 0.4);
+  transition: transform 0.3s ease;
 }
 
+.profile-img-circle:hover {
+  transform: scale(1.05);
+}
+
+/* File Upload */
 .form-group {
-  margin: 1rem 0;
-  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 2.5rem;
+}
+
+.form-group label {
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  color: #1e293b;
 }
 
 .form-group input[type="file"] {
-  display: block;
-  margin: 0.5rem auto;
+  padding: 0.5rem;
+  background: rgba(255, 255, 255, 0.7);
+  border-radius: 12px;
+  border: 1px solid #ccc;
+  font-size: 0.95rem;
+  margin-bottom: 1rem;
+  color: #1f2937;
 }
 
+.form-group button {
+  padding: 10px 18px;
+  background: #3b82f6;
+  border: none;
+  border-radius: 14px;
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.form-group button:hover {
+  background: #2563eb;
+}
+
+/* Form Layout */
 form {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.7rem 2.5rem;
 }
 
+/* Labels & Inputs */
 form label {
-  font-weight: 500;
-  color: #555;
+  font-weight: 600;
+  color: #0f172a;
+  margin-bottom: 0.3rem;
+  display: block;
 }
 
 form input,
 form select {
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 8px;
+  width: 100%;
+  padding: 12px 14px;
+  border-radius: 14px;
+  border: none;
   font-size: 1rem;
+  background: rgba(255, 255, 255, 0.6);
+  box-shadow: inset 2px 2px 5px #d1d5db, inset -2px -2px 5px #ffffff;
+  color: #111827;
+  transition: all 0.2s ease;
 }
 
 form input:focus,
 form select:focus {
   outline: none;
-  border-color: #3498db;
-  box-shadow: 0 0 5px rgba(52, 152, 219, 0.5);
+  background: white;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.35);
 }
 
-button {
-  background-color: #3498db;
+/* Submit Button */
+form button[type="submit"] {
+  grid-column: span 2;
+  margin-top: 10px;
+  padding: 14px 20px;
+  background: linear-gradient(to right, #3b82f6, #2563eb);
   color: white;
-  padding: 10px 15px;
-  font-weight: bold;
   border: none;
-  border-radius: 8px;
+  border-radius: 18px;
+  font-size: 1.1rem;
+  font-weight: 600;
   cursor: pointer;
-  transition: 0.3s ease;
+  transition: background 0.3s ease;
+  box-shadow: 0 5px 18px rgba(59, 130, 246, 0.3);
 }
 
-button:hover {
-  background-color: #2980b9;
+form button[type="submit"]:hover {
+  background: linear-gradient(to right, #2563eb, #1d4ed8);
 }
 
+/* Success Message */
 p {
+  grid-column: span 2;
   text-align: center;
-  color: green;
+  margin-top: 1rem;
   font-weight: 500;
-  margin-top: 0.5rem;
+  color: green;
+}
+
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  form {
+    grid-template-columns: 1fr;
+  }
+
+  form button[type="submit"] {
+    grid-column: span 1;
+  }
+}
+
+/* Animation */
+@keyframes fadeIn {
+  from {
+    transform: translateY(15px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
 }
