@@ -173,11 +173,11 @@ export default function ChatPage() {
     try {
       if (choice && isSender) {
         // ✅ Delete for Everyone
-        await axios.put(`/api/messages/delete-for-everyone/${msg._id}`);
+        await axios.put(`/messages/delete-for-everyone/${msg._id}`);
         setChat((prev) => prev.filter((m) => m._id !== msg._id));
       } else {
         // ✅ Delete for Me
-        await axios.put(`/api/messages/delete-for-me/${msg._id}`);
+        await axios.put(`/messages/delete-for-me/${msg._id}`);
         setChat((prev) => prev.filter((m) => m._id !== msg._id));
       }
     } catch (err) {
