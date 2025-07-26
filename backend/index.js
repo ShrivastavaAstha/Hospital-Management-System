@@ -1,4 +1,3 @@
-// socket-enabled-server.js or index.js
 const http = require("http");
 const { Server } = require("socket.io");
 const express = require("express");
@@ -9,18 +8,8 @@ require("dotenv").config();
 const Message = require("./models/Message.js");
 
 const app = express();
-const server = http.createServer(app); // ⬅️ Create HTTP server (required for Socket.IO)
-// const io = new Server(server, {
-//   cors: {
-//     origin: ["http://localhost:3000", "medcare-nine-alpha.vercel.app"],
+const server = http.createServer(app);
 
-//     methods: ["GET", "POST"],
-//     credentials: true,
-//   },
-// });
-
-// Middlewares
-// app.use(cors());
 const allowedOrigins = [
   "http://localhost:3000",
   "https://medcare-nine-alpha.vercel.app",
@@ -39,6 +28,7 @@ app.use(
     credentials: true,
   })
 );
+
 const io = new Server(server, {
   cors: {
     origin: allowedOrigins,
@@ -66,35 +56,73 @@ app.use("/api/admin", require("./routes/adminRoutes"));
 app.use("/api/auth", require("./routes/authRoutes"));
 app.use("/api/payment", require("./routes/paymentRoutes"));
 app.use("/api/users", require("./routes/userRoutes"));
-// Root Route
+app.use("/api/messages", require("./routes/messageRoutes")); // ✅ Add this route
+
 app.get("/", (req, res) => {
   res.send("Hospital Management Backend Running");
 });
 
-// ⚡️ Socket.IO Events
+// Socket Logic
+const userSocketMap = new Map(); // userId -> socket.id
+
 io.on("connection", (socket) => {
   console.log("🟢 A user connected:", socket.id);
 
+  socket.on("register_user", (userId) => {
+    userSocketMap.set(userId, socket.id);
+    console.log("✅ User registered:", userId);
+  });
+
   socket.on("join_room", (room) => {
     socket.join(room);
-    console.log(`User ${socket.id} joined room: ${room}`);
+    console.log(`🛏️ Joined room: ${room}`);
   });
 
   socket.on("send_message", async (data) => {
-    const newMsg = await Message.create({
-      senderId: data.sender,
-      receiverId: data.receiver,
-      message: data.message,
-    });
-    io.to(data.room).emit("receive_message", {
-      ...data,
-      _id: newMsg._id,
-    });
+    try {
+      const savedMsg = await Message.create({
+        sender: data.sender,
+        receiver: data.receiver,
+        room: data.room,
+        message: data.message,
+        time: data.time,
+        status: "sent",
+      });
+
+      io.to(data.room).emit("receive_message", savedMsg);
+    } catch (err) {
+      console.error("❌ Error saving message:", err);
+    }
   });
 
-  socket.on("disconnect", () => {
-    console.log("🔴 A user disconnected:", socket.id);
+  socket.on("message_delivered", async ({ room, messageId }) => {
+    try {
+      // Optional: update DB
+      await Message.findByIdAndUpdate(messageId, { status: "delivered" });
+
+      io.to(room).emit("message_delivered", { messageId });
+    } catch (err) {
+      console.error("❌ Error marking delivered:", err);
+    }
   });
+
+  socket.on("mark_seen", async ({ room, messageId, sender }) => {
+    try {
+      await Message.findByIdAndUpdate(messageId, { status: "seen" });
+
+      // Send to all users in room
+      io.to(room).emit("message_seen", { messageId });
+
+      // Also send directly to sender if online
+      const senderSocket = userSocketMap.get(sender);
+      if (senderSocket) {
+        io.to(senderSocket).emit("message_seen", { messageId });
+      }
+    } catch (err) {
+      console.error("❌ Error marking seen:", err);
+    }
+  });
+
   socket.on("typing", ({ room }) => {
     socket.to(room).emit("typing");
   });
@@ -102,9 +130,18 @@ io.on("connection", (socket) => {
   socket.on("stop_typing", ({ room }) => {
     socket.to(room).emit("stop_typing");
   });
+
+  socket.on("disconnect", () => {
+    console.log("🔴 A user disconnected:", socket.id);
+    for (const [userId, sId] of userSocketMap.entries()) {
+      if (sId === socket.id) {
+        userSocketMap.delete(userId);
+        break;
+      }
+    }
+  });
 });
 
-// Start server with Socket.IO support
 const PORT = process.env.PORT || 5000;
 server.listen(PORT, () => {
   console.log(`🚀 Server running on port ${PORT}`);

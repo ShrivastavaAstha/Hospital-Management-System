@@ -4,12 +4,6 @@ import io from "socket.io-client";
 import axios from "axios";
 import "./ChatPage.css";
 
-// 🔗 Connect to backend server with correct CORS origin allowed
-// const socket = io(process.env.REACT_APP_API_URL, {
-//   transports: ["websocket", "polling"],
-//   withCredentials: true,
-// });
-
 export default function ChatPage() {
   const { userId, doctorId } = useParams(); // ✅ userId instead of currentUserId
   const [message, setMessage] = useState("");
@@ -32,6 +26,26 @@ export default function ChatPage() {
   }, []);
 
   const roomId = [userId, doctorId].sort().join("_");
+  useEffect(() => {
+    const fetchOldMessages = async () => {
+      try {
+        const res = await axios.get(`/messages/${roomId}`);
+        setChat(res.data); // Set the old chat before new messages arrive
+      } catch (err) {
+        console.error("❌ Failed to fetch old messages:", err);
+      }
+    };
+
+    if (currentUser && receiver) {
+      fetchOldMessages();
+    }
+  }, [roomId, currentUser, receiver]);
+
+  useEffect(() => {
+    if (socket && currentUser?._id) {
+      socket.emit("register_user", currentUser._id);
+    }
+  }, [socket, currentUser]);
 
   // ✅ Fetch both from /api/users/
   useEffect(() => {
@@ -59,7 +73,31 @@ export default function ChatPage() {
 
     socket.on("receive_message", (data) => {
       setChat((prev) => [...prev, data]);
+      // If you are the receiver, mark it seen
+      if (data.receiver === currentUser._id) {
+        socket.emit("mark_seen", {
+          room: roomId,
+          messageId: data._id,
+          sender: data.sender,
+        });
+        // 2. Notify sender that message was delivered
+        socket.emit("message_delivered", {
+          room: roomId,
+          messageId: data._id,
+          sender: data.sender,
+        });
+      }
     });
+    socket.on("message_delivered", ({ messageId }) => {
+      setChat((prev) =>
+        prev.map((msg) =>
+          msg._id === messageId && msg.status !== "seen"
+            ? { ...msg, status: "delivered" }
+            : msg
+        )
+      );
+    });
+
     socket.on("typing", () => {
       setTyping(true);
     });
@@ -67,32 +105,51 @@ export default function ChatPage() {
       setTyping(false);
     });
 
+    socket.on("message_seen", ({ messageId }) => {
+      setChat((prev) =>
+        prev.map((msg) =>
+          msg._id === messageId ? { ...msg, status: "seen" } : msg
+        )
+      );
+    });
     return () => {
       socket.off("receive_message");
+      socket.off("message_seen");
       socket.off("typing");
       socket.off("stop_typing");
     };
-  }, [roomId, currentUser, receiver]);
+  }, [roomId, currentUser, receiver, socket]);
 
-  const sendMessage = () => {
+  useEffect(() => {
+    if (socket && currentUser && receiver) {
+      socket.emit("mark_seen", { room: roomId });
+    }
+  }, [socket, roomId, currentUser, receiver]);
+
+  const sendMessage = async () => {
     if (!message.trim()) return;
-    // const newMsg = {
-    //   sender: userId,
-    //   receiver: doctorId,
-    //   message,
-    //   room: roomId,
-    //   time: new Date().toLocaleTimeString(),
-    // };
+
     const newMsg = {
       sender: currentUser._id,
       receiver: receiver._id,
       message,
       room: roomId,
       time: new Date().toLocaleTimeString(),
+      status: "sent",
     };
-    socket.emit("send_message", newMsg);
-    setChat((prev) => [...prev, newMsg]);
-    setMessage("");
+
+    try {
+      // Save to DB
+      const res = await axios.post("/messages", newMsg);
+
+      // Emit the saved message (with _id from MongoDB)
+      socket.emit("send_message", res.data);
+
+      setChat((prev) => [...prev, res.data]);
+      setMessage("");
+    } catch (err) {
+      console.error("Error sending message:", err);
+    }
   };
 
   if (!currentUser || !receiver) return <p>Loading chat...</p>;
@@ -110,7 +167,19 @@ export default function ChatPage() {
             className={msg.sender === currentUser._id ? "sent" : "received"}
           >
             <span>{msg.message}</span>
-            <small>{msg.time}</small>
+            <small>
+              {msg.time}
+              {msg.sender === currentUser._id && (
+                <>
+                  {" "}
+                  · {msg.status === "sent" && "✓"}
+                  {msg.status === "delivered" && "✓✓"}
+                  {msg.status === "seen" && (
+                    <span style={{ color: "red" }}>✓✓</span>
+                  )}
+                </>
+              )}
+            </small>
           </p>
         ))}
       </div>
