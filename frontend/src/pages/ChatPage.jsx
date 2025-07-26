@@ -31,7 +31,9 @@ export default function ChatPage() {
   useEffect(() => {
     const fetchOldMessages = async () => {
       try {
-        const res = await axios.get(`/messages/${roomId}`);
+        const res = await axios.get(
+          `/messages/${roomId}?userId=${currentUser._id}`
+        );
         setChat(res.data); // Set the old chat before new messages arrive
       } catch (err) {
         console.error("❌ Failed to fetch old messages:", err);
@@ -158,6 +160,36 @@ export default function ChatPage() {
   {
     /* <p key={i} className={msg.sender === userId ? "sent" : "received"}> */
   }
+
+  const handleDeleteMessage = async (msg) => {
+    const isSender = msg.sender === currentUser._id;
+
+    const choice = window.confirm(
+      isSender
+        ? "Delete for everyone?\nClick 'OK' for Delete for Everyone\nClick 'Cancel' for Delete for Me"
+        : "Do you want to delete this message for yourself?"
+    );
+
+    try {
+      if (choice && isSender) {
+        // ✅ Delete for Everyone
+        await axios.delete(
+          `/messages/${msg._id}?userId=${currentUser._id}&deleteFor=everyone`
+        );
+        setChat((prev) => prev.filter((m) => m._id !== msg._id));
+      } else {
+        // ✅ Delete for Me
+        await axios.delete(
+          `/messages/${msg._id}?userId=${currentUser._id}&deleteFor=me`
+        );
+        setChat((prev) => prev.filter((m) => m._id !== msg._id));
+      }
+    } catch (err) {
+      console.error("❌ Error deleting message:", err);
+      alert("Failed to delete message.");
+    }
+  };
+
   return (
     <div>
       <div className="chat-container">
@@ -165,25 +197,34 @@ export default function ChatPage() {
         {typing && <p className="typing-indicator">Typing...</p>}
         <div className="chat-box">
           {chat.map((msg, i) => (
-            <p
+            <div
               key={i}
-              className={msg.sender === currentUser._id ? "sent" : "received"}
+              className={`message-wrapper ${
+                msg.sender === currentUser._id ? "sent" : "received"
+              }`}
             >
-              <span>{msg.message}</span>
-              <small>
-                {msg.time}
-                {msg.sender === currentUser._id && (
-                  <>
-                    {" "}
-                    · {msg.status === "sent" && "✓"}
-                    {msg.status === "delivered" && "✓✓"}
-                    {msg.status === "seen" && (
-                      <span style={{ color: "blue" }}>✓✓</span>
-                    )}
-                  </>
-                )}
-              </small>
-            </p>
+              <p>
+                <span>{msg.message}</span>
+                <small>
+                  {msg.time}
+                  {msg.sender === currentUser._id && (
+                    <>
+                      {" "}
+                      · {msg.status === "sent" && "✓"}
+                      {msg.status === "delivered" && "✓✓"}
+                      {msg.status === "seen" && (
+                        <span style={{ color: "blue" }}>✓✓</span>
+                      )}
+                    </>
+                  )}
+                </small>
+              </p>
+
+              {/* 🗑️ DELETE OPTIONS */}
+              <div className="delete-options">
+                <button onClick={() => handleDeleteMessage(msg)}>🗑️</button>
+              </div>
+            </div>
           ))}
         </div>
         <input

@@ -118,3 +118,18 @@ button:hover {
     opacity: 1;
   }
 }
+
+.message-wrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 4px 0;
+}
+
+.delete-options button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: red;
+  font-size: 14px;
+}

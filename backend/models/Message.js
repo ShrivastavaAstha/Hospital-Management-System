@@ -15,6 +15,16 @@ const messageSchema = new mongoose.Schema({
     enum: ["sent", "delivered", "seen"],
     default: "sent",
   },
+  deletedBy: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+    },
+  ],
+  isDeleted: {
+    type: Boolean,
+    default: false,
+  },
 });
 
 module.exports = mongoose.model("Message", messageSchema);
