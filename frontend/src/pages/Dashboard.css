@@ -1,16 +1,33 @@
-/* AdminDashboard.css */
+/* ✅ Essential layout fix */
+html, body {
+  margin: 0;
+  padding: 0;
+  max-width: 100vw;
+  overflow-x: hidden;
+  font-family: 'Segoe UI', sans-serif;
+  background-color: #f2f4f8;
+  color: #222;
+  box-sizing: border-box;
+}
 
-body {
+*, *::before, *::after {
+  box-sizing: inherit;
+}
+
+
+/* body {
   margin: 0;
   padding: 0;
   font-family: 'Segoe UI', sans-serif;
   background-color: #f2f4f8;
   color: #222;
-}
+} */
 
 .dashboard-wrapper {
   display: flex;
   min-height: 100vh;
+  width: 100%;
+  overflow-x: hidden;
 }
 
 /* Sidebar */
@@ -20,12 +37,13 @@ body {
   background-color: #2e3a59;
   color: white;
   padding: 20px;
-  position: fixed;         /* 👈 makes it fixed */
-  left: 0;
+  position: fixed;
   top: 0;
+  left: 0;
   bottom: 0;
   overflow-y: auto;
-  z-index: 100;
+  z-index: 1000;
+  transition: left 0.3s ease;
 }
 
 .sidebar h2 {
@@ -33,25 +51,31 @@ body {
   margin-bottom: 30px;
 }
 
-.sidebar a {
+.sidebar button {
   display: block;
-  color: #fff;
-  text-decoration: none;
-  margin: 15px 0;
-  font-weight: 500;
+  margin-bottom: 15px;
+  padding: 10px;
+  width: 100%;
+  background-color: #4f46e5;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
 }
 
-.sidebar a:hover {
-  text-decoration: underline;
+.sidebar button:hover {
+  background-color: #4338ca;
 }
 
 /* Main Content */
 .main {
+  margin-left: 250px;
   flex-grow: 1;
   padding: 40px;
+  transition: margin-left 0.3s ease;
+  width: calc(100% - 250px);
 }
 
-/* Topbar */
 .topbar {
   display: flex;
   justify-content: space-between;
@@ -64,19 +88,11 @@ body {
   font-weight: bold;
 }
 
-.topbar button {
-  background-color: #ff4d4f;
-  border: none;
-  color: white;
-  padding: 8px 14px;
-  border-radius: 5px;
-  cursor: pointer;
-}
-
 /* Stat Cards */
 .stats {
   display: flex;
   gap: 20px;
+  flex-wrap: wrap;
   margin-bottom: 40px;
 }
 
@@ -87,6 +103,7 @@ body {
   border-radius: 10px;
   box-shadow: 0 3px 8px rgba(0, 0, 0, 0.06);
   text-align: center;
+  min-width: 220px;
 }
 
 .stat-card h3 {
@@ -108,7 +125,8 @@ form {
   margin-bottom: 40px;
 }
 
-form input {
+form input,
+form select {
   padding: 10px;
   border-radius: 6px;
   border: 1px solid #ccc;
@@ -139,15 +157,20 @@ form button {
   box-shadow: 0 3px 8px rgba(0, 0, 0, 0.06);
 }
 
+/* Table Wrapper for Scroll */
+.table-wrapper {
+  overflow-x: auto;
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+  margin-top: 20px;
+}
+
 /* Tables */
 table {
   width: 100%;
   border-collapse: collapse;
-  background: white;
-  margin-top: 20px;
-  border-radius: 10px;
-  overflow: hidden;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+  min-width: 600px;
 }
 
 th, td {
@@ -174,6 +197,7 @@ tbody tr:hover {
   border-radius: 4px;
   cursor: pointer;
 }
+
 /* Hamburger menu (mobile only) */
 .hamburger {
   display: none;
@@ -182,28 +206,24 @@ tbody tr:hover {
   background: #2e3a59;
   color: white;
   cursor: pointer;
+  z-index: 1001;
+  position: fixed;
+  top: 10px;
+  left: 10px;
+  border-radius: 6px;
 }
 
 @media (max-width: 768px) {
   .hamburger {
     display: block;
-    position: sticky;
-    top: 0;
-    z-index: 999;
   }
 
   .sidebar {
-    position: fixed;
-    top: 50px;
     left: -100%;
-    width: 70%;
-    max-width: 280px;
-    height: 100vh;
-    background-color: #2e3a59;
-    color: white;
-    padding: 20px;
-    transition: left 0.3s ease-in-out;
-    z-index: 998;
+    width: 75%;
+    max-width: 260px;
+    transition: left 0.3s ease;
+    z-index: 1000;
   }
 
   .sidebar.open {
@@ -211,11 +231,176 @@ tbody tr:hover {
   }
 
   .main {
-    padding: 20px;
-    margin-left: 0 !important;
+    margin-left: 0;
+    width: 100%;
+    padding: 16px;
   }
 
-  .dashboard-wrapper {
+  .topbar {
     flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
   }
+
+  .stats {
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .stat-card {
+    width: 100%;
+  }
+
+  form {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  form input,
+  form select {
+    width: 100%;
+    font-size: 1rem;
+    padding: 10px;
+  }
+
+  form button {
+    width: 100%;
+    padding: 12px;
+    font-size: 1rem;
+  }
+
+  .chart-container {
+    padding: 16px;
+    margin-bottom: 30px;
+  }
+
+  .chart-container h4 {
+    font-size: 1rem;
+    margin-bottom: 12px;
+  }
+
+  .recharts-responsive-container {
+    width: 100% !important;
+    height: 300px !important;
+  }
+
+  /* Table Filters */
+  div[style*="gap: 10px"] {
+    flex-direction: column !important;
+    gap: 10px !important;
+    width: 100%;
+  }
+
+  div[style*="gap: 10px"] input {
+    width: 100%;
+    font-size: 1rem;
+    padding: 10px;
+  }
+
+  .table-wrapper {
+    width: 100%;
+    overflow-x: auto;
+    margin-top: 20px;
+    border-radius: 10px;
+    background: white;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+  }
+
+  table {
+    min-width: 600px;
+    width: 100%;
+  }
+
+  th, td {
+    padding: 10px;
+    font-size: 0.9rem;
+  }
+
+  .action-btn {
+    display: inline-block;
+    width: 100%;
+    padding: 8px;
+    font-size: 0.9rem;
+    margin: 4px 0;
+  }
+
+  h3, h4 {
+    font-size: 1.2rem;
+  }
+
+  .sidebar button {
+    font-size: 1rem;
+  }
+}
+.table-wrapper {
+  width: 100%;
+  overflow-x: auto;
+  margin-top: 20px;
+  border-radius: 10px;
+  background-color: #fff;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+  padding: 10px;
+}
+
+/* Style the table inside the wrapper */
+.table-wrapper table {
+  width: 100%;
+  min-width: 600px; /* Forces horizontal scroll on small screens */
+  border-collapse: collapse;
+}
+
+.table-wrapper th,
+.table-wrapper td {
+  padding: 12px 16px;
+  text-align: left;
+  font-size: 0.95rem;
+  white-space: nowrap; /* Prevents column from wrapping */
+}
+
+.table-wrapper th {
+  background-color: #f0f4f8;
+  font-weight: bold;
+}
+
+.table-wrapper tr:nth-child(even) {
+  background-color: #fafafa;
+}
+/* ✅ Responsive Table Wrapper */
+.responsive-table {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  margin-top: 20px;
+  border-radius: 10px;
+  background: #fff;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+}
+
+/* ✅ Table Styles */
+.responsive-table table {
+  width: 100%;
+  min-width: 600px; /* force scroll on small screens */
+  border-collapse: collapse;
+}
+
+/* ✅ Table Cell Styles */
+.responsive-table th,
+.responsive-table td {
+  padding: 12px 16px;
+  text-align: left;
+  border-bottom: 1px solid #eee;
+  white-space: nowrap; /* prevent wrapping */
+  font-size: 0.95rem;
+}
+
+/* ✅ Header Styling */
+.responsive-table th {
+  background-color: #f9fafb;
+  font-weight: 600;
+  color: #333;
+}
+
+/* ✅ Zebra rows */
+.responsive-table tr:nth-child(even) {
+  background-color: #fcfcfc;
 }

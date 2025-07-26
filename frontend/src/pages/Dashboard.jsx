@@ -1,5 +1,7 @@
 import React, { useRef, useEffect, useState } from "react";
 import axios from "axios";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import {
   LineChart,
   Line,
@@ -84,7 +86,7 @@ const Dashboard = () => {
           headers: { Authorization: `Bearer ${token}` },
         }
       );
-      alert("Doctor added!");
+      toast.success("Doctor added successfully!");
       setDoctors([...doctors, res.data.doctor]);
       setName("");
       setSpecialization("");
@@ -93,7 +95,7 @@ const Dashboard = () => {
       setEmail("");
       setPassword("");
     } catch (err) {
-      alert("Error adding doctor");
+      toast.error("Error adding doctor.");
     }
   };
 
@@ -140,6 +142,8 @@ const Dashboard = () => {
 
       {/* Sidebar */}
       <aside className={`sidebar ${sidebarOpen ? "open" : ""}`}>
+        <br />
+        <br />
         <h2>Admin Dashboard</h2>
         <button onClick={scrollToAppointments}>Appointments</button>
         <br />
@@ -151,9 +155,10 @@ const Dashboard = () => {
       </aside>
 
       {/* Main Content */}
-      <div className="main">
+      <div className={`main ${sidebarOpen ? "shifted" : ""}`}>
         <div className="topbar">
-          <h1>Welcome, Admin</h1>
+          <h1></h1>
+          <h1>Welcome, Admin✨</h1>
         </div>
         {/* Stats */}
         <div className="stats">
@@ -166,7 +171,7 @@ const Dashboard = () => {
             <p>{stats.totalAppointments}</p>
           </div>
           <div className="stat-card">
-            <h3>Revenue (₹)</h3>
+            <h3>Revenue</h3>
             <p>{stats.totalRevenue}</p>
           </div>
         </div>
@@ -287,41 +292,43 @@ const Dashboard = () => {
           </select>
         </div>
 
-        {doctors.length === 0 ? (
-          <p>No doctors found.</p>
-        ) : (
-          <table>
-            <thead>
-              <tr>
-                <th>Name</th>
-                <th>Specialization</th>
-                <th>Action</th>
-              </tr>
-            </thead>
-            <tbody>
-              {doctors
-                .filter((doc) =>
-                  filterSpecialization
-                    ? doc.specialization === filterSpecialization
-                    : true
-                )
-                .map((doc) => (
-                  <tr key={doc._id}>
-                    <td>{doc.name}</td>
-                    <td>{doc.specialization}</td>
-                    <td>
-                      <button
-                        className="action-btn"
-                        onClick={() => handleDeleteDoctor(doc._id)}
-                      >
-                        Delete
-                      </button>
-                    </td>
-                  </tr>
-                ))}
-            </tbody>
-          </table>
-        )}
+        <div className="responsive-table">
+          {doctors.length === 0 ? (
+            <p>No doctors found.</p>
+          ) : (
+            <table>
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Specialization</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                {doctors
+                  .filter((doc) =>
+                    filterSpecialization
+                      ? doc.specialization === filterSpecialization
+                      : true
+                  )
+                  .map((doc) => (
+                    <tr key={doc._id}>
+                      <td>{doc.name}</td>
+                      <td>{doc.specialization}</td>
+                      <td>
+                        <button
+                          className="action-btn"
+                          onClick={() => handleDeleteDoctor(doc._id)}
+                        >
+                          Delete
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+              </tbody>
+            </table>
+          )}
+        </div>
         {/* Appointment Table */}
         <h3 ref={appointmentSectionRef} style={{ marginTop: "40px" }}>
           Appointments
@@ -358,67 +365,73 @@ const Dashboard = () => {
           />
         </div>
 
-        {appointments.length === 0 ? (
-          <p>No appointments found.</p>
-        ) : (
-          <table>
-            <thead>
-              <tr>
-                <th>Doctor</th>
-                <th>Patient</th>
-                <th>Date</th>
-                <th>Time</th>
-                <th>Action</th>
-              </tr>
-            </thead>
-            <tbody>
-              {appointments
-                .filter(
-                  (appt) =>
-                    (!filterDoctor ||
-                      appt?.doctorId?.name
-                        ?.toLowerCase()
-                        .includes(filterDoctor.toLowerCase())) &&
-                    (!filterPatient ||
-                      appt?.patientId?.name
-                        ?.toLowerCase()
-                        .includes(filterPatient.toLowerCase())) &&
-                    (!filterDate || appt?.appointmentDate === filterDate) &&
-                    (!filterTime || appt?.appointmentTime === filterTime)
-                )
-                .map((appt) => (
-                  <tr key={appt._id}>
-                    <td>{appt?.doctorId?.name || "Unknown"}</td>
-                    <td>{appt?.patientId?.name || "Unknown"}</td>
-                    <td>{appt.appointmentDate}</td>
-                    <td>{appt.appointmentTime}</td>
-                    <td>
-                      <button
-                        className="action-btn"
-                        onClick={() => handleDeleteAppointment(appt._id)}
-                      >
-                        Delete
-                      </button>
-                      <button
-                        className="action-btn"
-                        style={{
-                          marginLeft: "5px",
-                          backgroundColor: "#4f46e5",
-                          color: "white",
-                        }}
-                        onClick={() =>
-                          navigate(`/admin/patient/${appt.patientId._id}`)
-                        }
-                      >
-                        View
-                      </button>
-                    </td>
-                  </tr>
-                ))}
-            </tbody>
-          </table>
-        )}
+        <div className="responsive-table">
+          {appointments.length === 0 ? (
+            <p>No appointments found.</p>
+          ) : (
+            <table>
+              <thead>
+                <tr>
+                  <th>Doctor</th>
+                  <th>Patient</th>
+                  <th>Date</th>
+                  <th>Time</th>
+                  <th>Action</th>
+                  <th>Patient Info.</th>
+                </tr>
+              </thead>
+              <tbody>
+                {appointments
+                  .filter(
+                    (appt) =>
+                      (!filterDoctor ||
+                        appt?.doctorId?.name
+                          ?.toLowerCase()
+                          .includes(filterDoctor.toLowerCase())) &&
+                      (!filterPatient ||
+                        appt?.patientId?.name
+                          ?.toLowerCase()
+                          .includes(filterPatient.toLowerCase())) &&
+                      (!filterDate || appt?.appointmentDate === filterDate) &&
+                      (!filterTime || appt?.appointmentTime === filterTime)
+                  )
+                  .map((appt) => (
+                    <tr key={appt._id}>
+                      <td>{appt?.doctorId?.name || "Unknown"}</td>
+                      <td>{appt?.patientId?.name || "Unknown"}</td>
+                      <td>{appt.appointmentDate}</td>
+                      <td>{appt.appointmentTime}</td>
+                      <td>
+                        <button
+                          className="action-btn"
+                          onClick={() => handleDeleteAppointment(appt._id)}
+                        >
+                          Delete
+                        </button>
+                      </td>
+                      <td>
+                        <button
+                          className="action-btn"
+                          style={{
+                            marginLeft: "5px",
+                            backgroundColor: "#4f46e5",
+                            color: "white",
+                          }}
+                          onClick={() =>
+                            navigate(`/admin/patient/${appt.patientId._id}`)
+                          }
+                        >
+                          View
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+              </tbody>
+            </table>
+          )}
+        </div>
       </div>
+      <ToastContainer position="top-right" autoClose={3000} hideProgressBar />
     </div>
   );
 };
